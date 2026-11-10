@@ -6,7 +6,7 @@ Native Kotlin / Compose premium Backgammon. Never add backend connectivity, secr
 ## Boundaries
 For now use one Gradle app module with extractable package boundaries:
 - domain: immutable settings, theme definitions, repository contracts. No Android or Compose imports.
-- engine: normalized board geometry and immutable positions. No Android or Compose imports; future rules belong here.
+- engine: immutable game models, standard short-backgammon rules/reducer, injectable local dice, and normalized board geometry. No Android or Compose imports. Validate actions against whole-turn legal sequences; never bypass mandatory dice usage.
 - data: DataStore implementations. Depends on domain, never presentation.
 - designsystem: visual tokens and reusable rendering; consumes domain/engine models.
 - animation: motion policy; visual animation must never generate game outcomes.

@@ -9,7 +9,8 @@ without creating empty Gradle modules. Domain and engine contain no Android/Comp
 
 - domain/settings: immutable preferences, repository contract, stable enum values.
 - domain/theme: BoardTheme, ARGB palette, registry, theme repository contract.
-- engine: normalized 1000 × 700 geometry, hit testing, standard starting illustration.
+- engine: pure Kotlin standard short-backgammon rules, immutable models, deterministic reducer,
+  injectable local dice, normalized 1000 × 700 geometry and the unchanged starting illustration.
 - data: a single Preferences DataStore, codec and theme/settings repository implementations.
 - presentation: activity-scoped SettingsViewModel, StateFlow, lifecycle-aware collection,
   stateless Board/Settings screens, serializable Navigation 3 destinations.
@@ -34,7 +35,9 @@ last committed visual theme. Preferences are loaded before the interactive scree
 Navigation uses rememberNavBackStack and serializable keys for recreation/process restoration.
 Lazy grid and scroll states use Compose saveable defaults. No orientation lock or configChanges.
 English and Georgian are app-local resources; changing language updates the visible UI without
-restarting the activity. Both languages are bundled (language splitting is disabled), so the\noffline switcher works after App Bundle installation. This does not yet integrate the Android\nsystem per-app language picker.
+restarting the activity. Both languages are bundled (language splitting is disabled), so the
+offline switcher works after App Bundle installation. This does not yet integrate the Android
+system per-app language picker.
 
 ## Rendering and motion
 
@@ -76,3 +79,13 @@ Next: review portrait/landscape/tablet screenshots and interaction accessibility
 a pure Kotlin rules engine with legal move generation and exhaustive position tests before
 adding interactive movement. Audio, haptic playback, full animation choreography, gameplay
 and Supabase are deliberately outside this milestone.
+
+## Task 03 — rules engine
+
+The pure Kotlin engine is now implemented independently of the unchanged static UI. Its reducer
+accepts explicit opening rolls, supplied dice, checker moves, turn completion and reset. Full
+ordered legal sequences include intermediate snapshots and enforce compulsory dice usage.
+Board construction preserves exactly fifteen checkers per player; game results distinguish
+single, gammon and backgammon. LocalDice is optional and separate from deterministic transitions.
+See [engine/README.md](app/src/main/java/ge/gogichaishvili/backgammon/engine/README.md) for
+coordinates, API, lifecycle and future ViewModel integration. No backend or animations were added.
