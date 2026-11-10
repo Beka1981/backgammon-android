@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -34,9 +35,23 @@ android {
     buildFeatures {
         compose = true
     }
+    // Both supported languages must be available for the offline in-app switcher.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 }
 
 dependencies {
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.lifecycle.compose)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization)
+    testImplementation(libs.kotlinx.coroutines.test)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
