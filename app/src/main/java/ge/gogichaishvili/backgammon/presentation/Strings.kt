@@ -3,6 +3,7 @@ package ge.gogichaishvili.backgammon.presentation
 import android.content.res.Configuration
 import android.content.res.Resources
 import androidx.annotation.StringRes
+import androidx.annotation.PluralsRes
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +25,11 @@ fun LocalizedContent(language: AppLanguage, content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalAppResources provides resources, content = content)
 }
 @Composable
-fun tr(@StringRes id: Int): String = LocalAppResources.current.getString(id)
+fun tr(@StringRes id: Int, vararg args: Any): String = LocalAppResources.current.getString(id, *args)
+
+@Composable
+fun trQuantity(@PluralsRes id: Int, quantity: Int, vararg args: Any): String =
+    LocalAppResources.current.getQuantityString(id, quantity, *args)
 
 @StringRes
 fun themeName(id: String): Int = when (id) {

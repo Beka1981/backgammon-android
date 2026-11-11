@@ -20,6 +20,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Opt-in non-debuggable measurement target; production variants retain their configuration.
+    testBuildType = if (providers.gradleProperty("profileTests").orNull == "true") "profile" else "debug"
+    sourceSets.getByName("androidTest").kotlin.apply {
+        if (providers.gradleProperty("profileTests").orNull == "true") directories.add("src/profileTest/java")
+    }
     buildTypes {
         release {
             optimization {
@@ -27,6 +32,15 @@ android {
                 packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
         }
+    }
+    buildTypes.create("profile") {
+        initWith(buildTypes.getByName("release"))
+        isDebuggable = false
+        applicationIdSuffix = ".profile"
+        testProguardFiles("profile-test.pro")
+        proguardFiles("profile-target.pro")
+        signingConfig = signingConfigs.getByName("debug")
+        matchingFallbacks += "release"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -47,6 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.datastore)
+    implementation(libs.androidx.graphics.path)
     implementation(libs.androidx.lifecycle.compose)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.kotlinx.coroutines)
@@ -65,6 +80,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+    add("profileImplementation", libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

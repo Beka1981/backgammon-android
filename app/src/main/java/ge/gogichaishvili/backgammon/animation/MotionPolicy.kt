@@ -4,7 +4,7 @@ import ge.gogichaishvili.backgammon.domain.settings.AnimationSpeed
 
 enum class MotionKind(val baseMillis: Int) {
     CHECKER_MOVE(300), SELECTION(140), DRAG_SETTLE(180), STACK(220),
-    DICE_ROLL(650), DICE_BOUNCE(320), HIT_TO_BAR(360), BEAR_OFF(340),
+    DICE_ROLL(520), DICE_BOUNCE(320), HIT_TO_BAR(360), BEAR_OFF(340),
     LEGAL_MOVE(160), TURN(260), VICTORY(900), THEME(280), NAVIGATION(220),
 }
 

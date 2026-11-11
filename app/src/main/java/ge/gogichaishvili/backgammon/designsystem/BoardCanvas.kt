@@ -21,8 +21,12 @@ fun BoardCanvas(
     checkerStyle: CheckerStyle = CheckerStyle.SCULPTED,
     diceStyle: DiceStyle = DiceStyle.IVORY,
     description: String? = null,
+    board: BoardState = BoardState.initial(),
+    diceValues: List<Int> = listOf(3, 5),
+    hidden: List<CheckerVisualSlot> = emptyList(),
     overlay: @Composable BoxScope.() -> Unit = {},
 ) {
+    CompositionTrace("BG.Compose.BoardCanvas")
     val palette = theme.palette
     val labelPaint = remember(palette) {
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -36,9 +40,17 @@ fun BoardCanvas(
         role = Role.Image
     }
     Box(modifier.aspectRatio(BoardGeometry.aspectRatio).then(semantics)) {
-        Canvas(Modifier.fillMaxSize()) {
+        Canvas(Modifier.fillMaxSize().graphicsLayer()) {
             scale(size.width / BoardGeometry.width, size.height / BoardGeometry.height, Offset.Zero) {
-                drawBoard(theme, labelPaint, checkerStyle, diceStyle)
+                renderTrace("BG.Draw.Materials") { drawBoard(theme, labelPaint) }
+            }
+        }
+        Canvas(Modifier.fillMaxSize().graphicsLayer()) {
+            scale(size.width / BoardGeometry.width, size.height / BoardGeometry.height, Offset.Zero) {
+                renderTrace("BG.Draw.Checkers") { drawPosition(board, hidden, palette, checkerStyle) }
+                diceValues.take(2).forEachIndexed { index, value ->
+                    renderTrace("BG.Draw.BoardDice") { drawDie(Offset(625f + index * 77f, 325f), value, palette, diceStyle) }
+                }
             }
         }
         overlay()
@@ -48,8 +60,6 @@ fun BoardCanvas(
 private fun DrawScope.drawBoard(
     theme: BoardTheme,
     labelPaint: Paint,
-    checkerStyle: CheckerStyle,
-    diceStyle: DiceStyle,
 ) {
     val p = theme.palette
     drawRoundRect(
@@ -92,16 +102,6 @@ private fun DrawScope.drawBoard(
         drawPath(path, Color(p.accent).copy(alpha = 0.2f), style = Stroke(1f))
         drawContext.canvas.nativeCanvas.drawText(point.toString(), c.x, if (top) 31f else 687f, labelPaint)
     }
-    PreviewPosition.stacks.forEach { stack ->
-        repeat(stack.count) { index ->
-            val c = BoardGeometry.checkerCenter(stack.point, index, stack.count)
-            checker(Offset(c.x, c.y), Color(if (stack.side == CheckerSide.IVORY) p.ivory else p.dark),
-                p, checkerStyle)
-        }
-    }
-    // Fixed illustrative dice only; no rolling, randomness or game result.
-    dice(Offset(625f, 325f), 3, p, diceStyle)
-    dice(Offset(702f, 325f), 5, p, diceStyle)
     // Hinges emphasize the bar without modifying the logical playfield.
     listOf(160f, 520f).forEach { y ->
         drawRoundRect(Brush.horizontalGradient(listOf(Color(p.frame), Color(p.accent), Color(p.frame))),
@@ -109,9 +109,27 @@ private fun DrawScope.drawBoard(
     }
 }
 
-private fun DrawScope.checker(center: Offset, color: Color, p: BoardPalette, style: CheckerStyle) {
-    val radius = BoardGeometry.checkerRadius
-    drawCircle(Color(p.shadow).copy(alpha = 0.22f), radius + 4f, center + Offset(2f, 5f))
+private fun DrawScope.drawPosition(board: BoardState, hidden: List<CheckerVisualSlot>, p: BoardPalette, style: CheckerStyle) {
+    fun render(slot: CheckerVisualSlot, radius: Float = BoardGeometry.checkerRadius) {
+        if (slot in hidden) return
+        val c = checkerVisualCenter(board, slot)
+        drawChecker(Offset(c.x, c.y), Color(if (slot.player == Player.WHITE) p.ivory else p.dark), p, style, radius)
+    }
+    (1..24).forEach { number ->
+        val point = board.point(number)
+        val owner = point.owner
+        if (owner != null) repeat(point.count) { render(CheckerVisualSlot(owner, BoardTarget.Point(number), it)) }
+    }
+    Player.entries.forEach { player ->
+        repeat(board.bar[player]) { render(CheckerVisualSlot(player, BoardTarget.Bar, it)) }
+        repeat(board.borneOff[player]) { render(CheckerVisualSlot(player,
+            if (player == Player.WHITE) BoardTarget.WhiteTray else BoardTarget.BlackTray, it), 18f) }
+    }
+}
+
+internal fun DrawScope.drawChecker(center: Offset, color: Color, p: BoardPalette, style: CheckerStyle,
+    radius: Float = BoardGeometry.checkerRadius, elevation: Float = 0f) {
+    drawCircle(Color(p.shadow).copy(alpha = 0.22f), radius + 4f + elevation * 5f, center + Offset(2f, 5f + elevation * 7f))
     drawCircle(Color(p.shadow), radius, center + Offset(1f, 3f))
     if (style == CheckerStyle.SCULPTED) {
         drawCircle(Brush.radialGradient(listOf(lerp(color, Color.White, 0.28f), color,
@@ -127,12 +145,21 @@ private fun DrawScope.checker(center: Offset, color: Color, p: BoardPalette, sty
     }
 }
 
-private fun DrawScope.dice(origin: Offset, value: Int, p: BoardPalette, style: DiceStyle) {
+internal fun DrawScope.drawDie(origin: Offset, value: Int, p: BoardPalette, style: DiceStyle) {
     val face = Color(if (style == DiceStyle.IVORY) p.ivory else p.accent)
     drawRoundRect(Color(p.shadow), origin + Offset(2f, 5f), Size(52f, 52f), CornerRadius(9f))
     drawRoundRect(Brush.linearGradient(listOf(lerp(face, Color.White, 0.2f), face)),
         origin, Size(52f, 52f), CornerRadius(9f))
-    val pips = if (value == 3) listOf(13f to 13f, 26f to 26f, 39f to 39f)
-        else listOf(13f to 13f, 39f to 13f, 26f to 26f, 13f to 39f, 39f to 39f)
+    val diagonal = listOf(13f to 13f, 39f to 39f)
+    val corners = diagonal + listOf(39f to 13f, 13f to 39f)
+    val pips = when (value) {
+        1 -> listOf(26f to 26f)
+        2 -> diagonal
+        3 -> diagonal + (26f to 26f)
+        4 -> corners
+        5 -> corners + (26f to 26f)
+        6 -> corners + listOf(13f to 26f, 39f to 26f)
+        else -> emptyList()
+    }
     pips.forEach { (x, y) -> drawCircle(Color(p.dark), 4f, origin + Offset(x, y)) }
 }

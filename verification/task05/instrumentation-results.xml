@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="14" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-11-11T10:49:05" hostname="localhost">
+  <testsuite name="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" tests="1" failures="0" errors="0" skipped="0" time="0.001" timestamp="2026-11-11T10:49:05" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="useAppContext" classname="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" time="0.001" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameActivityTest" tests="1" failures="0" errors="0" skipped="0" time="196.904" timestamp="2026-11-11T10:49:05" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="activityRecreationAndLandscapeKeepGameAndConfirmationState" classname="ge.gogichaishvili.backgammon.GameActivityTest" time="196.904" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameInteractionTest" tests="7" failures="0" errors="0" skipped="0" time="643.613" timestamp="2026-11-11T10:49:05" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="hitMotionEndsWithOneCheckerOnTheOpponentsBar" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="91.097" />
+    <testcase name="doublesUseFourMovesBeforeTurnCanSwitch" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="125.150" />
+    <testcase name="newGameDialogCanCancelOrResetWithoutChangingRulesState" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="113.458" />
+    <testcase name="ambiguousBearOffOffersExplicitDieChoice" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="94.547" />
+    <testcase name="realPointerTapsSelectHighlightAndMoveWithActualEngineDice" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="90.652" />
+    <testcase name="bearingOffShowsReproducibleGammonDialog" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="78.302" />
+    <testcase name="barEntryIsAvailableWhileOtherSourcesAreForbidden" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="50.407" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameplayPolishTest" tests="3" failures="0" errors="0" skipped="0" time="258.452" timestamp="2026-11-11T10:49:05" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="themeChangeDuringHitKeepsOneAnimationOwnerAndInterruptionKeepsCommittedBoard" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="147.882" />
+    <testcase name="fileReopenRestoresAnExactMidTurnWithoutReplayingAnimations" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="57.165" />
+    <testcase name="corruptedFileRecoversWithVisibleNoticeAndDurablySavesFreshGame" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="53.405" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.NavigationTest" tests="2" failures="0" errors="0" skipped="0" time="144.808" timestamp="2026-11-11T10:49:05" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="settingsDestinationSurvivesSavedStateRestoration" classname="ge.gogichaishvili.backgammon.NavigationTest" time="57.605" />
+    <testcase name="themeSelectionUpdatesBoardAfterNavigatingBack" classname="ge.gogichaishvili.backgammon.NavigationTest" time="87.203" />
+  </testsuite>
+</testsuites>

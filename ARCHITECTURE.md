@@ -1,91 +1,116 @@
-# Milestone 01 — foundation
+# Backgammon architecture
 
-## Dependency direction
+## Boundaries
 
-Presentation -> domain <- data. Design system -> domain + engine.
-Animation policy -> domain settings. The application container composes these pieces.
-One Android Gradle module is intentional: package boundaries keep extraction possible
-without creating empty Gradle modules. Domain and engine contain no Android/Compose imports.
+One Android app module with extractable packages; explicit constructor injection in AppContainer.
+Presentation -> domain <- data. Design system consumes domain and engine models.
+The pure Kotlin engine owns legal sequences, compulsory dice usage, deterministic transitions,
+turns and scoring. It has no Android/Compose/storage/network dependency. LocalDice accepts an
+injectable DieSource; supplied server dice can use the same reducer in a future authorized task.
 
-- domain/settings: immutable preferences, repository contract, stable enum values.
-- domain/theme: BoardTheme, ARGB palette, registry, theme repository contract.
-- engine: pure Kotlin standard short-backgammon rules, immutable models, deterministic reducer,
-  injectable local dice, normalized 1000 × 700 geometry and the unchanged starting illustration.
-- data: a single Preferences DataStore, codec and theme/settings repository implementations.
-- presentation: activity-scoped SettingsViewModel, StateFlow, lifecycle-aware collection,
-  stateless Board/Settings screens, serializable Navigation 3 destinations.
-- designsystem: spacing, application palette, reusable Canvas renderer with an overlay slot.
-- ui/theme: Material bridge, typography and shapes.
-- animation: finite effect categories and speed/reduced-motion policy.
-- network: documented future boundary only; no client, endpoint or backend dependency.
+- domain/settings and domain/theme: immutable preferences, skins, repository contracts.
+- domain/match: committed MatchRecord, phase validation and MatchRepository contract.
+- domain/feedback: pure preference/foreground feedback policy and playback interface.
+- engine: rules, immutable state, normalized 1000 × 700 geometry; see engine/README.md.
+- data: one Preferences DataStore for settings and one typed DataStore for the active match.
+- presentation: activity-scoped StateFlow ViewModels, serialized commands, Navigation 3,
+  lifecycle-aware collection and stateless screens.
+- designsystem: original procedural materials, skin palettes, tokens, board and checker geometry.
+- animation: finite motion categories and pure visual curves, never game outcomes.
+- feedback: Activity-owned SoundPool/View haptics; original synthesized PCM cues prepared on IO.
+- network: documentation only. No Supabase, endpoint, client or secret.
 
-The small application container provides explicit constructor injection. Hilt can replace
-this at a genuine feature/scope boundary. Use cases and remote interfaces should be introduced
-when they encapsulate actual behavior; no speculative forwarding abstractions are needed yet.
+Hilt, Room and extra modules are deferred until real scopes, relational history or multiple
+features justify them. Existing wrapper, AGP, SDK, compiler and Compose BOM remain unchanged.
+DataStore 1.2.1 and the explicit graphics-path 1.1.0 override resolve the native RELRO
+compatibility issue in older transitive libraries; see TASK_05_REPORT.md.
 
-## State and persistence
+## Authoritative game data and durability
 
-UI action -> queued ViewModel command -> atomic repository edit -> persisted flow -> UI state.
-There is one source of truth, with no optimistic theme value that can diverge from disk.
-Every update transforms the latest persisted settings, preserving unrelated and unknown keys.
-Theme IDs and preference keys form the v1 schema. Unknown IDs/enum values fall back safely.
-IO failures are visible: read retry or a save failure message. A failed write retains the
-last committed visual theme. Preferences are loaded before the interactive screens appear.
+UI action -> single GameViewModel channel -> revision/busy validation -> engine on worker
+dispatcher -> MatchRepository atomic write on IO -> immutable UI publication on Main.
+Both dice and moves are saved before the visible action is acknowledged. A failed write keeps
+the previous committed board, locks gameplay and retains the exact candidate for retry;
+retry never rolls again. Failed reads offer retry. A newer schema locks input and is never
+overwritten. Save failures do not disappear behind optimistic UI.
 
-Navigation uses rememberNavBackStack and serializable keys for recreation/process restoration.
-Lazy grid and scroll states use Compose saveable defaults. No orientation lock or configChanges.
-English and Georgian are app-local resources; changing language updates the visible UI without
-restarting the activity. Both languages are bundled (language splitting is disabled), so the
-offline switcher works after App Bundle installation. This does not yet integrate the Android
-system per-app language picker.
+Typed DataStore is appropriate for one small aggregate, without queries, relationships or
+a match-history database. The bounded BGMN binary envelope stores stable IDs, schema, payload
+length and CRC32. Version 2 reads the version 1 payload and rewrites it on the next write.
+CRC detects damage, not malicious tampering. Validation covers fifteen checkers per player,
+phase, roll, remaining dice, player ownership and legal remaining moves. Corruption recovery
+creates and durably saves a fresh game with a visible notice. Future schemas preserve their
+bytes. A single application-owned DataStore instance owns each production file.
 
-## Rendering and motion
+The active match includes board, bar, borne-off counts, phase, current player, roll, unused
+dice, dice owner and result-dialog dismissal. It excludes animations, selection, pending input
+and random generator state. Process restart restores exact committed rules data without
+replaying animations, audio or haptics. SavedStateHandle can preserve activity-only selection
+and confirmation when its engine snapshot matches the durable record. Rotation retains the
+activity ViewModel. Disk always wins over an older instance snapshot.
 
-The board is a static illustration with all 24 standard points, central bar, empty bearing-off
-trays, correctly counted starting stacks and fixed dice (3 and 5). There is no dice generator.
-Geometry and hit regions use logical coordinates; Canvas scales only at the rendering boundary.
-Point hit regions intentionally exclude the central dice band. Overlapping checker centers
-compress deterministically for stacks up to 15. Future gameplay must map pointer coordinates
-back to these logical bounds and provide semantic actions and accessible expanded hit targets.
+Settings use atomic edits of the latest preferences, stable IDs and safe unknown-value
+fallbacks. UI reflects the persisted flow; read/write failures are visible. English and
+Georgian resources are bundled for the offline app-local switcher. Navigation 3 back stack
+and scroll states use saveable state. No orientation locks or configChanges overrides.
 
-Original procedural grain, shaded checker discs, bevel rings, inlaid triangles and gradients
-use only skin palette data. The renderer accepts an overlay slot for future moving pieces;
-the future board state must be supplied as immutable engine data when gameplay is introduced.
+## Rendering, input and motion
 
-Current theme crossfades and navigation fades use MotionPolicy; Compose honors system animation
-scale. Reduced motion sets every category duration to zero. Future checker/dice overlays should
-use keyed Animatable objects with graphicsLayer transforms, cancellation on retarget/disposal
-and a snap to authoritative engine positions after completion/cancellation. Pointer drag should
-follow input directly. No animation result may update a game outcome. Avoid particles, blur,
-infinite loops and extra layers until device measurements justify their cost.
+BoardCanvas takes immutable engine state. Logical coordinates remain independent of pixels.
+Point, bar and tray semantics expose counts and legal actions; equivalent 48dp source/target
+buttons support narrow phones, keyboard and TalkBack. Ambiguous bearing-off dice require an
+explicit choice. No composable decides legal moves.
 
-## Dependency choices
+Each checker transition captures the before board while the authoritative state is already
+committed. Overlay flights suppress their corresponding final slots. Existing compressed
+stack members animate between before/after geometry; hit checkers travel below the arriving
+checker. Bearing-off ends at the tray's actual slot/radius. Lift, scale and shadow are visual
+only. A single checker animation owner outside the skin Crossfade prevents duplicate lifecycle
+callbacks while both theme layers sample the same progress. The board composable takes
+explicit inputs; retained Crossfade content reads observable latest game/settings/progress
+references. This prevents stale palettes and checker snapshots during simultaneous skin changes
+and interrupted movement. Integration tests validate rendered palette pixels, not just titles.
 
-Existing wrapper, AGP, Kotlin compiler, Compose BOM and SDK levels are preserved.
-Stable Navigation 3 1.0.0, DataStore 1.2.0, Lifecycle 2.9.4, Coroutines 1.10.2 and Serialization
-1.9.0 are pinned to avoid forcing a compiler/BOM migration. Activity Compose is raised to
-1.11.0 for Navigation 3's modern back-navigation integration. No experimental dependency
-or screenshot-test plugin is introduced. Preview configurations cover all skins on phone,
-landscape and tablet, plus Georgian and large text Settings.
+Selection, checker and dice motion are finite. Dice use predetermined engine faces with
+rotation, diminishing bounce and settling. MotionPolicy respects speed, reduced motion and
+Compose's system duration scale. Only Canvas draw/graphicsLayer scopes read per-frame progress.
+Static materials and checker layers have isolated graphics layers, motivated by baseline
+trace evidence of redundant redraws. No heavyweight graphics engine, particle system or blur.
 
-## Testing and next milestone
+Successful completion and interruption are different actions. Only a matching successful
+landing emits placement/hit/off/victory cues. Lifecycle stop, disposal and the visual watchdog
+discard effects and snap to committed state without landing sounds or rule changes.
+Revision stamps and busy state reject repeated/stale input.
 
-Local tests cover geometry, stack bounds, starting counts, theme fallbacks, every motion category,
-real file-backed DataStore reopen, concurrent updates, unknown key preservation and ViewModel
-read/write failure recovery. Unit tests do not substitute for device checks of navigation,
-restoration, TalkBack, visual contrast, font scaling or animation performance.
+## Feedback lifecycle
 
-Next: review portrait/landscape/tablet screenshots and interaction accessibility, then implement
-a pure Kotlin rules engine with legal move generation and exhaustive position tests before
-adding interactive movement. Audio, haptic playback, full animation choreography, gameplay
-and Supabase are deliberately outside this milestone.
+MainActivity collects non-replayed feedback events only while RESUMED and uses current
+preferences. Sounds are short original synthesized WAV/PCM cues, prepared on IO and loaded
+asynchronously. They never use game randomness. Audio initializes only when enabled on an
+audio-output-capable device. Missing/unloaded audio is skipped rather than replayed late.
+Ringer mode, communication mode, media mute/volume and window focus gate playback. No audio
+focus theft, background loops or extra permissions. Haptics use View.performHapticFeedback
+without override flags, allowing Android settings/hardware to decide availability.
+Reduced motion also shortens feedback. Stop on activity stop and release on destroy.
+The music preference remains reserved; this milestone adds no music soundtrack.
 
-## Task 03 — rules engine
+## Verification and measurement
 
-The pure Kotlin engine is now implemented independently of the unchanged static UI. Its reducer
-accepts explicit opening rolls, supplied dice, checker moves, turn completion and reset. Full
-ordered legal sequences include intermediate snapshots and enforce compulsory dice usage.
-Board construction preserves exactly fifteen checkers per player; game results distinguish
-single, gammon and backgammon. LocalDice is optional and separate from deterministic transitions.
-See [engine/README.md](app/src/main/java/ge/gogichaishvili/backgammon/engine/README.md) for
-coordinates, API, lifecycle and future ViewModel integration. No backend or animations were added.
+Preserve engine and UI tests. Unit coverage includes file-backed reopen, all dice combinations,
+schema migration, checksum/truncation/corruption, future-schema preservation, IO retry and
+visual interruption. Instrumentation adds theme changes during a hit, repeated input,
+file reopen and visible corruption recovery. Profile-only tests use an isolated application
+ID so deterministic fixtures never overwrite the ordinary app's match.
+
+The non-debuggable profile variant inherits release shrinking, uses debug signing solely for
+local installation and keeps the few APIs referenced by the in-process measurement harness.
+Its manifest is shell-profileable. Opt-in profileTests includes Kotlin measurement sources.
+Real Choreographer/FrameMetrics and Perfetto captures cover gameplay, themes and rotation;
+whole-process allocation deltas include instrumentation overhead. See verification/task05,
+tools/game-profile.init.gradle.kts and TASK_05_REPORT.md. These emulator measurements are
+diagnostic, not physical-device benchmarks or proof of 60 FPS. Profile-specific rules do
+not alter release shrinking.
+
+Native audits inspect runtime AAR and APK ELF LOAD/RELRO boundaries and ZIP offsets; SDK
+zipalign independently checks APK packaging. There is no pageSizeCompat override or warning
+dismissal. The instrumentation guard asserts that the compatibility warning is absent.

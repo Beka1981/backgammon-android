@@ -1,0 +1,122 @@
+{
+  "command": "./gradlew build test lint",
+  "variant": "debug",
+  "tests": 422,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "suites": [
+    {
+      "suite": "BoardGeometryTest",
+      "tests": 6,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "ExampleUnitTest",
+      "tests": 1,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "SettingsPersistenceTest",
+      "tests": 4,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "SettingsViewModelTest",
+      "tests": 4,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "ThemeAndMotionTest",
+      "tests": 3,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "data.MatchDiceMatrixTest",
+      "tests": 36,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "data.MatchPersistenceTest",
+      "tests": 15,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "designsystem.GameplayMotionTest",
+      "tests": 4,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "engine.BearOffAndScoringTest",
+      "tests": 15,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "engine.DiceMatrixTest",
+      "tests": 252,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "engine.EngineInvariantTest",
+      "tests": 8,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "engine.GameTransitionsTest",
+      "tests": 13,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "engine.MoveRulesTest",
+      "tests": 17,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "feedback.FeedbackTest",
+      "tests": 6,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "presentation.game.DurableGameViewModelTest",
+      "tests": 14,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "suite": "presentation.game.GameViewModelTest",
+      "tests": 24,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    }
+  ]
+}

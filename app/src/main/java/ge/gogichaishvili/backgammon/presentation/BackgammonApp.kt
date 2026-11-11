@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.*
@@ -19,6 +21,7 @@ import ge.gogichaishvili.backgammon.domain.settings.AppSettings
 import ge.gogichaishvili.backgammon.domain.theme.BoardTheme
 import ge.gogichaishvili.backgammon.ui.theme.BackgammonTheme
 import kotlinx.serialization.Serializable
+import ge.gogichaishvili.backgammon.presentation.game.*
 
 @Serializable
 private data object BoardRoute : NavKey
@@ -33,7 +36,14 @@ fun BackgammonApp(
     onUpdate: ((AppSettings) -> AppSettings) -> Unit,
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
+    gameState: GameUiState? = null,
+    onGameAction: (GameUiAction) -> Unit = {},
 ) {
+    // NavEntry content can outlive its entry-provider invocation. Read observable latest
+    // values inside the retained entry instead of capturing its initial snapshot.
+    val currentState by rememberUpdatedState(state)
+    val currentGame by rememberUpdatedState(gameState)
+    val currentGameAction by rememberUpdatedState(onGameAction)
     LocalizedContent(state.settings.language) {
         BackgammonTheme(state.theme) {
             val stack = rememberNavBackStack(BoardRoute)
@@ -93,9 +103,9 @@ fun BackgammonApp(
                             predictivePopTransitionSpec = { fadeIn(tween(duration)) togetherWith fadeOut(tween(duration)) },
                             entryProvider = { key ->
                                 when (key) {
-                                    BoardRoute -> NavEntry(key) { BoardScreen(state, openSettings) }
+                                    BoardRoute -> NavEntry(key) { BoardScreen(currentState, openSettings, gameState = currentGame, onGameAction = currentGameAction) }
                                     SettingsRoute -> NavEntry(key) {
-                                        SettingsScreen(state.settings, themes, onTheme, onUpdate)
+                                        SettingsScreen(currentState.settings, themes, onTheme, onUpdate)
                                     }
                                     else -> error("Unknown destination")
                                 }

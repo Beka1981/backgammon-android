@@ -1,0 +1,94 @@
+{
+  "package": "ge.gogichaishvili.backgammon.profile",
+  "debuggable": false,
+  "sdk": 37,
+  "device": "sdk_gphone16k_x86_64",
+  "clock": "real Choreographer",
+  "soundAndHaptics": "disabled for consistent rendering measurement",
+  "refreshHz": 60.000004,
+  "measuredMoves": 6,
+  "gameplay": {
+    "totalFrame": {
+      "count": 47,
+      "p50Ms": 479.383365,
+      "p95Ms": 3641.525332,
+      "maxMs": 4443.47603,
+      "over16_67Ms": 47
+    },
+    "drawCpu": {
+      "count": 47,
+      "p50Ms": 6.335949,
+      "p95Ms": 48.127274,
+      "maxMs": 194.873209,
+      "over16_67Ms": 9
+    },
+    "layoutCpu": {
+      "count": 47,
+      "p50Ms": 0.847868,
+      "p95Ms": 47.971968,
+      "maxMs": 598.18463,
+      "over16_67Ms": 5
+    },
+    "callbackDrops": 0,
+    "wallMs": 20189.088938,
+    "allocatedBytes": 13565952,
+    "gcCount": 1,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  },
+  "theme": {
+    "totalFrame": {
+      "count": 3,
+      "p50Ms": 3384.202456,
+      "p95Ms": 3384.202456,
+      "maxMs": 4091.096031,
+      "over16_67Ms": 3
+    },
+    "drawCpu": {
+      "count": 3,
+      "p50Ms": 4.067824,
+      "p95Ms": 4.067824,
+      "maxMs": 4.26335,
+      "over16_67Ms": 0
+    },
+    "layoutCpu": {
+      "count": 3,
+      "p50Ms": 0.112431,
+      "p95Ms": 0.112431,
+      "maxMs": 1.102042,
+      "over16_67Ms": 0
+    },
+    "callbackDrops": 0,
+    "wallMs": 5007.082861,
+    "allocatedBytes": 950272,
+    "gcCount": 0,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  },
+  "orientation": {
+    "totalFrame": {
+      "count": 3,
+      "p50Ms": 5539.309635,
+      "p95Ms": 5539.309635,
+      "maxMs": 20442.696236,
+      "over16_67Ms": 3
+    },
+    "drawCpu": {
+      "count": 3,
+      "p50Ms": 194.6101,
+      "p95Ms": 194.6101,
+      "maxMs": 248.147316,
+      "over16_67Ms": 3
+    },
+    "layoutCpu": {
+      "count": 3,
+      "p50Ms": 549.0122,
+      "p95Ms": 549.0122,
+      "maxMs": 3709.576299,
+      "over16_67Ms": 3
+    },
+    "callbackDrops": 0,
+    "wallMs": 46999.277558,
+    "allocatedBytes": 3472480,
+    "gcCount": 1,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  }
+}

@@ -1,0 +1,51 @@
+[873.936]            query.cc:191 Query execution time: 1869 ms
+"stage","section","samples","avg_wall_ms","total_cpu_ms"
+"BG.Stage.gameplay","BG.Draw.BoardDice",24,0.144000,3.446000
+"BG.Stage.gameplay","BG.Draw.Checkers",19,3.514000,50.992000
+"BG.Stage.gameplay","BG.Draw.Dice",12,0.143000,1.711000
+"BG.Stage.gameplay","BG.Draw.Overlay",49,0.813000,10.978000
+"BG.Stage.orientation","BG.Draw.Checkers",2,1.693000,2.755000
+"BG.Stage.orientation","BG.Draw.Dice",4,0.116000,0.463000
+"BG.Stage.orientation","BG.Draw.Materials",2,8.317000,2.202000
+"BG.Stage.orientation","BG.Draw.Overlay",2,0.067000,0.135000
+"BG.Stage.theme","BG.Draw.Checkers",7,4.660000,22.926000
+"BG.Stage.theme","BG.Draw.Dice",6,0.098000,0.589000
+"BG.Stage.theme","BG.Draw.Materials",3,1.095000,3.284000
+"BG.Stage.theme","BG.Draw.Overlay",7,0.056000,0.389000
+
+"stage","composition","count"
+"BG.Stage.gameplay","BG.Compose.BoardCanvas",19
+"BG.Stage.gameplay","BG.Compose.DiceDisplay",19
+"BG.Stage.gameplay","BG.Compose.GameScreen",19
+"BG.Stage.gameplay","BG.Compose.InteractiveBoard",19
+"BG.Stage.orientation","BG.Compose.BoardCanvas",2
+"BG.Stage.orientation","BG.Compose.DiceDisplay",2
+"BG.Stage.orientation","BG.Compose.GameScreen",2
+"BG.Stage.orientation","BG.Compose.InteractiveBoard",2
+"BG.Stage.theme","BG.Compose.BoardCanvas",7
+"BG.Stage.theme","BG.Compose.DiceDisplay",4
+"BG.Stage.theme","BG.Compose.GameScreen",4
+"BG.Stage.theme","BG.Compose.InteractiveBoard",7
+
+"stage","jank_type","frames"
+"BG.Stage.gameplay","App Deadline Missed, Non Animating",1
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed",11
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",17
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed",15
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",16
+"BG.Stage.orientation","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",2
+"BG.Stage.theme","App Deadline Missed, Non Animating",1
+"BG.Stage.theme","SurfaceFlinger CPU Deadline Missed, App Deadline Missed",4
+"BG.Stage.theme","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",1
+"BG.Stage.theme","SurfaceFlinger Scheduling, App Deadline Missed",1
+"BG.Stage.theme","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",5
+
+"name","samples","min_mib","max_mib"
+"HWUI All Memory",101,2.130000,60.300000
+"Purgeable HWUI Misc Memory",101,0.060000,35.770000
+"mem.rss",56,61.750000,166.820000
+
+"name","idx","severity","source","value"
+
+"pid","name","cmdline"
+30611,"ge.gogichaishvili.backgammon.profile","ge.gogichaishvili.backgammon.profile"

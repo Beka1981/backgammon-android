@@ -11,7 +11,8 @@ import org.junit.Rule
 import org.junit.Test
 
 class NavigationTest {
-    @get:Rule val compose = createComposeRule()
+    @get:Rule(order = 2) val pageSizeCompatibility = PageSizeCompatibilityRule()
+    @get:Rule(order = 1) val compose = createComposeRule()
 
     @Test fun themeSelectionUpdatesBoardAfterNavigatingBack() {
         var settings by mutableStateOf(AppSettings())

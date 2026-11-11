@@ -1,0 +1,42 @@
+[233.589]            query.cc:191 Query execution time: 83 ms
+"stage","section","samples","avg_wall_ms","total_cpu_ms","max_cpu_ms"
+"BG.Stage.gameplay","BG.Draw.BoardDice",42,2.757000,49.171000,39.160000
+"BG.Stage.gameplay","BG.Draw.Checkers",37,10.522000,163.657000,41.558000
+"BG.Stage.gameplay","BG.Draw.Dice",12,3.332000,39.988000,38.066000
+"BG.Stage.gameplay","BG.Draw.Materials",37,2.369000,86.569000,40.972000
+"BG.Stage.gameplay","BG.Draw.Overlay",37,0.394000,13.819000,3.806000
+"BG.Stage.orientation","BG.Draw.Checkers",8,83.872000,214.344000,79.955000
+"BG.Stage.orientation","BG.Draw.Dice",8,5.338000,2.548000,0.876000
+"BG.Stage.orientation","BG.Draw.Materials",8,6.736000,50.173000,39.878000
+"BG.Stage.orientation","BG.Draw.Overlay",8,0.544000,4.352000,2.801000
+"BG.Stage.theme","BG.Draw.Checkers",3,14.728000,44.184000,40.582000
+"BG.Stage.theme","BG.Draw.Dice",2,0.207000,0.414000,0.282000
+"BG.Stage.theme","BG.Draw.Materials",3,1.300000,3.899000,1.374000
+"BG.Stage.theme","BG.Draw.Overlay",3,0.124000,0.371000,0.169000
+
+"stage","composition","count"
+"BG.Stage.orientation","BG.Compose.BoardCanvas",5
+"BG.Stage.orientation","BG.Compose.DiceDisplay",3
+"BG.Stage.orientation","BG.Compose.GameScreen",3
+"BG.Stage.orientation","BG.Compose.InteractiveBoard",5
+"BG.Stage.theme","BG.Compose.BoardCanvas",5
+"BG.Stage.theme","BG.Compose.DiceDisplay",2
+"BG.Stage.theme","BG.Compose.GameScreen",2
+"BG.Stage.theme","BG.Compose.InteractiveBoard",5
+
+"stage","jank_type","frames"
+"BG.Stage.gameplay","App Deadline Missed, Non Animating",1
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed",8
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",15
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed",10
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",13
+"BG.Stage.orientation","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",1
+"BG.Stage.theme","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",2
+"BG.Stage.theme","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",1
+
+"id","name","type","parent_id","source_arg_set_id","machine_id","unit","description","upid"
+
+"id","ts","track_id","value","arg_set_id"
+
+"id","name","key","idx","severity","source","value","description","machine_id","trace_id"
+

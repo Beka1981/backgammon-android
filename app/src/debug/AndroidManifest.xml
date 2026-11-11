@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- No page-size compatibility override: bundled binaries must pass the native audit. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -16,9 +16,15 @@ import ge.gogichaishvili.backgammon.designsystem.*
 import ge.gogichaishvili.backgammon.domain.settings.AppSettings
 import ge.gogichaishvili.backgammon.domain.theme.BoardTheme
 import ge.gogichaishvili.backgammon.engine.BoardGeometry
+import ge.gogichaishvili.backgammon.presentation.game.*
 
 @Composable
-fun BoardScreen(state: SettingsUiState, onSettings: () -> Unit, modifier: Modifier = Modifier) {
+fun BoardScreen(state: SettingsUiState, onSettings: () -> Unit, modifier: Modifier = Modifier,
+    gameState: GameUiState? = null, onGameAction: (GameUiAction) -> Unit = {}) {
+    if (gameState != null) {
+        GameScreen(state, gameState, onGameAction, modifier)
+        return
+    }
     val motion = MotionPolicy(state.settings.animationSpeed, state.settings.reducedMotion)
     BoxWithConstraints(modifier.fillMaxSize().padding(Space.medium), contentAlignment = Alignment.Center) {
         if (maxWidth >= 700.dp && maxWidth > maxHeight) {
