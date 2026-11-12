@@ -1,6 +1,10 @@
 package ge.gogichaishvili.backgammon
 
 import android.os.Bundle
+import android.content.Intent
+import androidx.lifecycle.ViewModelProvider
+import ge.gogichaishvili.backgammon.presentation.auth.AuthAction
+import ge.gogichaishvili.backgammon.presentation.auth.AuthViewModel
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +35,7 @@ import ge.gogichaishvili.backgammon.ui.theme.BackgammonTheme
 
 class MainActivity : ComponentActivity() {
     private lateinit var feedback: AndroidGameFeedback
+    private lateinit var authModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -38,6 +43,10 @@ class MainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         val container = (application as BackgammonApplication).container
         feedback = AndroidGameFeedback(applicationContext, window.decorView, lifecycleScope)
+        authModel = ViewModelProvider(this, viewModelFactory {
+            initializer { AuthViewModel(container.auth) }
+        })[AuthViewModel::class.java]
+        handleAuthIntent(intent)
         val settingsFactory = viewModelFactory {
             initializer { SettingsViewModel(container.settings, container.themes) }
         }
@@ -49,6 +58,7 @@ class MainActivity : ComponentActivity() {
             val gameModel: GameViewModel = viewModel(factory = gameFactory)
             val settings by settingsModel.state.collectAsStateWithLifecycle()
             val game by gameModel.state.collectAsStateWithLifecycle()
+            val auth by authModel.state.collectAsStateWithLifecycle()
             SideEffect { if (settings.loaded) feedback.configure(settings.settings) }
             LaunchedEffect(gameModel) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -61,8 +71,24 @@ class MainActivity : ComponentActivity() {
             }
             BackgammonApp(settings, settingsModel.availableThemes, settingsModel::selectTheme,
                 settingsModel::update, settingsModel::retryRead, settingsModel::dismissSaveError,
-                game, gameModel::dispatch)
+                game, gameModel::dispatch, auth, authModel::dispatch)
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleAuthIntent(intent)
+    }
+
+    private fun handleAuthIntent(incoming: Intent) {
+        // Preserve normal launch identity for lifecycle/restoration observers.
+        if (incoming.action != Intent.ACTION_VIEW) return
+        // Never forward nested intents/extras/URI permissions or import supplied bearer tokens.
+        val callback = incoming.dataString
+        setIntent(Intent(this, MainActivity::class.java)) // Remove one-time code from retained activity intent.
+        if (callback != null && callback.length <= 4096)
+            authModel.dispatch(AuthAction.Callback(callback))
     }
 
     override fun onStop() { if (::feedback.isInitialized) feedback.stop(); super.onStop() }

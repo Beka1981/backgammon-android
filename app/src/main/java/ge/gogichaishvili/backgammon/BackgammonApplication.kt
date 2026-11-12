@@ -18,6 +18,11 @@ private val Context.matchDataStore by dataStore(
     corruptionHandler = ReplaceFileCorruptionHandler { StoredMatch.Recovered })
 
 class AppContainer(context: Context) {
+    private val authScope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO)
+    val auth: ge.gogichaishvili.backgammon.domain.auth.AuthRepository by lazy {
+        ge.gogichaishvili.backgammon.data.auth.SupabaseClientProvider.repository(
+            ge.gogichaishvili.backgammon.data.auth.EncryptedAuthStorage(context), authScope)
+    }
     val settings: SettingsRepository = DataStoreSettingsRepository(context.settingsDataStore)
     val matches: MatchRepository = DataStoreMatchRepository(context.matchDataStore)
     val themes: ThemeRepository = LocalThemeRepository(settings)

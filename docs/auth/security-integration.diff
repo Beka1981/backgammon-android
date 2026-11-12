@@ -1,0 +1,156 @@
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 4ca108e..cb1d2f5 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -2,6 +2,8 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools">
+
++    <uses-permission android:name="android.permission.INTERNET" />
++
+     <application
+         android:name=".BackgammonApplication"
+         android:allowBackup="true"
+@@ -14,6 +16,7 @@
+         android:theme="@style/Theme.Backgammon">
+         <activity
+             android:name=".MainActivity"
++            android:launchMode="singleTop"
+             android:exported="true"
+             android:theme="@style/Theme.Backgammon"
+             android:windowSoftInputMode="adjustResize">
+@@ -22,6 +25,13 @@
+
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
++            <intent-filter>
++                <action android:name="android.intent.action.VIEW" />
++                <category android:name="android.intent.category.DEFAULT" />
++                <category android:name="android.intent.category.BROWSABLE" />
++                <data android:scheme="${applicationId}" android:host="auth" android:path="/confirm" />
++                <data android:scheme="${applicationId}" android:host="auth" android:path="/recovery" />
++            </intent-filter>
+         </activity>
+     </application>
+
+diff --git a/app/src/main/java/ge/gogichaishvili/backgammon/MainActivity.kt b/app/src/main/java/ge/gogichaishvili/backgammon/MainActivity.kt
+index d3508ff..6fe52dd 100644
+--- a/app/src/main/java/ge/gogichaishvili/backgammon/MainActivity.kt
++++ b/app/src/main/java/ge/gogichaishvili/backgammon/MainActivity.kt
+@@ -1,6 +1,10 @@
+ package ge.gogichaishvili.backgammon
+
+ import android.os.Bundle
++import android.content.Intent
++import androidx.lifecycle.ViewModelProvider
++import ge.gogichaishvili.backgammon.presentation.auth.AuthAction
++import ge.gogichaishvili.backgammon.presentation.auth.AuthViewModel
+ import androidx.activity.ComponentActivity
+ import androidx.activity.compose.setContent
+ import androidx.activity.enableEdgeToEdge
+@@ -31,6 +35,7 @@ import ge.gogichaishvili.backgammon.ui.theme.BackgammonTheme
+
+ class MainActivity : ComponentActivity() {
+     private lateinit var feedback: AndroidGameFeedback
++    private lateinit var authModel: AuthViewModel
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         enableEdgeToEdge(
+@@ -38,6 +43,10 @@ class MainActivity : ComponentActivity() {
+             navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
+         val container = (application as BackgammonApplication).container
+         feedback = AndroidGameFeedback(applicationContext, window.decorView, lifecycleScope)
++        authModel = ViewModelProvider(this, viewModelFactory {
++            initializer { AuthViewModel(container.auth) }
++        })[AuthViewModel::class.java]
++        handleAuthIntent(intent)
+         val settingsFactory = viewModelFactory {
+             initializer { SettingsViewModel(container.settings, container.themes) }
+         }
+@@ -49,6 +58,7 @@ class MainActivity : ComponentActivity() {
+             val gameModel: GameViewModel = viewModel(factory = gameFactory)
+             val settings by settingsModel.state.collectAsStateWithLifecycle()
+             val game by gameModel.state.collectAsStateWithLifecycle()
++            val auth by authModel.state.collectAsStateWithLifecycle()
+             SideEffect { if (settings.loaded) feedback.configure(settings.settings) }
+             LaunchedEffect(gameModel) {
+                 lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+@@ -61,10 +71,26 @@ class MainActivity : ComponentActivity() {
+             }
+             BackgammonApp(settings, settingsModel.availableThemes, settingsModel::selectTheme,
+                 settingsModel::update, settingsModel::retryRead, settingsModel::dismissSaveError,
+-                game, gameModel::dispatch)
++                game, gameModel::dispatch, auth, authModel::dispatch)
+         }
+     }
+
++    override fun onNewIntent(intent: Intent) {
++        super.onNewIntent(intent)
++        setIntent(intent)
++        handleAuthIntent(intent)
++    }
++
++    private fun handleAuthIntent(incoming: Intent) {
++        // Preserve normal launch identity for lifecycle/restoration observers.
++        if (incoming.action != Intent.ACTION_VIEW) return
++        // Never forward nested intents/extras/URI permissions or import supplied bearer tokens.
++        val callback = incoming.dataString
++        setIntent(Intent(this, MainActivity::class.java)) // Remove one-time code from retained activity intent.
++        if (callback != null && callback.length <= 4096)
++            authModel.dispatch(AuthAction.Callback(callback))
++    }
++
+     override fun onStop() { if (::feedback.isInitialized) feedback.stop(); super.onStop() }
+     override fun onDestroy() { if (::feedback.isInitialized) feedback.close(); super.onDestroy() }
+ }
+diff --git a/app/src/main/res/xml/backup_rules.xml b/app/src/main/res/xml/backup_rules.xml
+index 4df9255..2e46a93 100644
+--- a/app/src/main/res/xml/backup_rules.xml
++++ b/app/src/main/res/xml/backup_rules.xml
+@@ -1,13 +1,4 @@
+-<?xml version="1.0" encoding="utf-8"?><!--
+-   Sample backup rules file; uncomment and customize as necessary.
+-   See https://developer.android.com/guide/topics/data/autobackup
+-   for details.
+-   Note: This file is ignored for devices older than API 31
+-   See https://developer.android.com/about/versions/12/backup-restore
+--->
++<?xml version="1.0" encoding="utf-8"?>
+ <full-backup-content>
+-    <!--
+-   <include domain="sharedpref" path="."/>
+-   <exclude domain="sharedpref" path="device.xml"/>
+--->
+-</full-backup-content>
+\ No newline at end of file
++    <exclude domain="sharedpref" path="auth_secure_v1.xml" />
++</full-backup-content>
+diff --git a/app/src/main/res/xml/data_extraction_rules.xml b/app/src/main/res/xml/data_extraction_rules.xml
+index 9ee9997..bf43952 100644
+--- a/app/src/main/res/xml/data_extraction_rules.xml
++++ b/app/src/main/res/xml/data_extraction_rules.xml
+@@ -1,19 +1,9 @@
+-<?xml version="1.0" encoding="utf-8"?><!--
+-   Sample data extraction rules file; uncomment and customize as necessary.
+-   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
+-   for details.
+--->
++<?xml version="1.0" encoding="utf-8"?>
+ <data-extraction-rules>
+     <cloud-backup>
+-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
+-        <include .../>
+-        <exclude .../>
+-        -->
++        <exclude domain="sharedpref" path="auth_secure_v1.xml" />
+     </cloud-backup>
+-    <!--
+     <device-transfer>
+-        <include .../>
+-        <exclude .../>
++        <exclude domain="sharedpref" path="auth_secure_v1.xml" />
+     </device-transfer>
+-    -->
+-</data-extraction-rules>
+\ No newline at end of file
++</data-extraction-rules>

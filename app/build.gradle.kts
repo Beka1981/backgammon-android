@@ -1,8 +1,29 @@
+import java.util.Properties
+import java.net.URI
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
+
+// Client-public configuration only. Invalid/privileged keys are never embedded.
+val localAuthProperties = Properties().apply {
+    val source = rootProject.file("local.properties")
+    if (source.isFile) source.inputStream().use { load(it) }
+}
+fun authValue(name: String): String =
+    providers.environmentVariable(name).orNull ?: localAuthProperties.getProperty(name, "")
+val candidateUrl = authValue("SUPABASE_URL").trim()
+val candidateKey = authValue("SUPABASE_PUBLISHABLE_KEY").trim()
+val authConfigured = runCatching {
+    val uri = URI(candidateUrl)
+    uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.userInfo == null &&
+        uri.rawQuery == null && uri.rawFragment == null && uri.port in listOf(-1, 443) &&
+        uri.path in listOf("", "/") &&
+        candidateKey.matches(Regex("sb_publishable_[A-Za-z0-9_-]{12,490}"))
+}.getOrDefault(false)
+fun authLiteral(value: String): String = "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 
 android {
     namespace = "ge.gogichaishvili.backgammon"
@@ -16,6 +37,10 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("boolean", "SUPABASE_CONFIGURED", authConfigured.toString())
+        buildConfigField("String", "SUPABASE_URL", authLiteral(if (authConfigured) candidateUrl.trimEnd('/') else ""))
+        buildConfigField("String", "SUPABASE_PUBLISHABLE_KEY", authLiteral(if (authConfigured) candidateKey else ""))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,6 +73,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     // Both supported languages must be available for the offline in-app switcher.
     bundle {
@@ -58,6 +84,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.supabase.auth)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.datastore)
@@ -67,6 +96,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

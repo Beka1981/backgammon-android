@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".BackgammonApplication"
         android:allowBackup="true"
@@ -14,6 +16,7 @@
         android:theme="@style/Theme.Backgammon">
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:exported="true"
             android:theme="@style/Theme.Backgammon"
             android:windowSoftInputMode="adjustResize">
@@ -21,6 +24,13 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${applicationId}" android:host="auth" android:path="/confirm" />
+                <data android:scheme="${applicationId}" android:host="auth" android:path="/recovery" />
             </intent-filter>
         </activity>
     </application>

@@ -5,6 +5,11 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
+import ge.gogichaishvili.backgammon.presentation.auth.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -27,6 +32,8 @@ import ge.gogichaishvili.backgammon.presentation.game.*
 private data object BoardRoute : NavKey
 @Serializable
 private data object SettingsRoute : NavKey
+@Serializable
+private data object AccountRoute : NavKey
 
 @Composable
 fun BackgammonApp(
@@ -38,16 +45,28 @@ fun BackgammonApp(
     onDismissError: () -> Unit,
     gameState: GameUiState? = null,
     onGameAction: (GameUiAction) -> Unit = {},
+    authUi: AuthUiState? = null,
+    onAuthAction: (AuthAction) -> Unit = {},
 ) {
     // NavEntry content can outlive its entry-provider invocation. Read observable latest
     // values inside the retained entry instead of capturing its initial snapshot.
     val currentState by rememberUpdatedState(state)
     val currentGame by rememberUpdatedState(gameState)
     val currentGameAction by rememberUpdatedState(onGameAction)
+    val currentAuth by rememberUpdatedState(authUi)
+    val currentAuthAction by rememberUpdatedState(onAuthAction)
     LocalizedContent(state.settings.language) {
         BackgammonTheme(state.theme) {
             val stack = rememberNavBackStack(BoardRoute)
             val inSettings = stack.lastOrNull() == SettingsRoute
+            val inAccount = stack.lastOrNull() == AccountRoute
+            val openAccount = { if (stack.lastOrNull() != AccountRoute) stack.add(AccountRoute); Unit }
+            LaunchedEffect(authUi?.openRequested) {
+                if (authUi?.openRequested == true) {
+                    openAccount()
+                    currentAuthAction(AuthAction.NavigationHandled)
+                }
+            }
             val back = { if (stack.size > 1) stack.removeAt(stack.lastIndex); Unit }
             val openSettings = { if (stack.lastOrNull() != SettingsRoute) stack.add(SettingsRoute); Unit }
             val duration = MotionPolicy(state.settings.animationSpeed, state.settings.reducedMotion)
@@ -58,14 +77,27 @@ fun BackgammonApp(
                         Row(Modifier.fillMaxWidth().statusBarsPadding().padding(horizontal = Space.medium),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(Space.small)) {
-                            if (inSettings) {
+                            if (inSettings || inAccount) {
                                 TextButton(onClick = back, modifier = Modifier.heightIn(min = Space.minTouch)) {
                                     Text(tr(R.string.back))
                                 }
                             }
-                            Text(tr(if (inSettings) R.string.settings else R.string.app_name),
+                            Text(tr(if (inSettings) R.string.settings else if (inAccount) R.string.auth_account else R.string.app_name),
                                 Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
-                            if (!inSettings && state.loaded) {
+                            if (!inSettings && !inAccount && currentAuth != null) {
+                                val accountLabel = tr(R.string.auth_account)
+                                IconButton(onClick = openAccount, modifier = Modifier.testTag("open_account")
+                                    .semantics { contentDescription = accountLabel }) {
+                                    val ink = MaterialTheme.colorScheme.primary
+                                    Canvas(Modifier.size(24.dp)) {
+                                        drawCircle(ink, size.width * .18f, center.copy(y = size.height * .3f))
+                                        drawArc(ink, 180f, 180f, useCenter = true,
+                                            topLeft = androidx.compose.ui.geometry.Offset(size.width * .12f, size.height * .58f),
+                                            size = androidx.compose.ui.geometry.Size(size.width * .76f, size.height * .64f))
+                                    }
+                                }
+                            }
+                            if (!inSettings && !inAccount && state.loaded) {
                                 TextButton(onClick = openSettings, modifier = Modifier.heightIn(min = Space.minTouch)) {
                                     Text(tr(R.string.settings))
                                 }
@@ -106,6 +138,9 @@ fun BackgammonApp(
                                     BoardRoute -> NavEntry(key) { BoardScreen(currentState, openSettings, gameState = currentGame, onGameAction = currentGameAction) }
                                     SettingsRoute -> NavEntry(key) {
                                         SettingsScreen(currentState.settings, themes, onTheme, onUpdate)
+                                    }
+                                    AccountRoute -> NavEntry(key) {
+                                        currentAuth?.let { AuthScreen(it, currentAuthAction, back) }
                                     }
                                     else -> error("Unknown destination")
                                 }
