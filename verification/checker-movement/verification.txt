@@ -1,0 +1,13 @@
+Source: current Task 06 working tree compared with ac75285.
+Production source edits for this investigation: none.
+Command: build test lint :app:assembleDebugAndroidTest --max-workers=2
+Result: Build finished successfully.
+JVM: 433 passed, zero failures/errors/skips.
+Lint: zero errors, 22 warnings.
+Command: :app:connectedDebugAndroidTest --max-workers=1
+Result: Build finished successfully; emulator-5554: 23 PASSED.
+Final JUnit XML timestamp: 2026-11-11T15:13:49.
+New cases: Classic, Royal, Ocean real pointer + rendered pixels + disk restoration, 3/3 passed.
+Manual ordinary app: Black 17->21 (4), 17->23 (6); counts/dice and displayed checkers verified.
+User-reported no-selection failure: not reproduced; exact failing skin/player/dice/source requested.
+No fix or root cause claimed. No commit/push.

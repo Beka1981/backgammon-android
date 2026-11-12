@@ -1,0 +1,49 @@
+{
+  "package": "ge.gogichaishvili.backgammon.profile",
+  "debuggable": false,
+  "scope": "paired software Canvas; allocations cover whole instrumented process",
+  "samples": [
+    {
+      "cached": false,
+      "draws": 2000,
+      "allocatedBytes": 983040,
+      "threadCpuMs": 3260.017656,
+      "wallMs": 3692.975931
+    },
+    {
+      "cached": true,
+      "draws": 2000,
+      "allocatedBytes": 1638400,
+      "threadCpuMs": 2596.316982,
+      "wallMs": 2954.008559
+    },
+    {
+      "cached": true,
+      "draws": 2000,
+      "allocatedBytes": 294912,
+      "threadCpuMs": 2425.615685,
+      "wallMs": 2648.0201
+    },
+    {
+      "cached": false,
+      "draws": 2000,
+      "allocatedBytes": 983040,
+      "threadCpuMs": 2626.820787,
+      "wallMs": 2747.950503
+    },
+    {
+      "cached": false,
+      "draws": 2000,
+      "allocatedBytes": 1048576,
+      "threadCpuMs": 2329.447346,
+      "wallMs": 2352.244631
+    },
+    {
+      "cached": true,
+      "draws": 2000,
+      "allocatedBytes": 196608,
+      "threadCpuMs": 2078.388039,
+      "wallMs": 2497.977279
+    }
+  ]
+}

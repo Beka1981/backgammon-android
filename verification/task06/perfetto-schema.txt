@@ -1,0 +1,73 @@
+Schema validation against the pinned Android Profiler trace_processor.
+
+"qualified_name","object_type","summary"
+"slices.cpu_time.thread_slice_cpu_time","TABLE","Package: slices
+Module: slices.cpu_time
+Name: thread_slice_cpu_time
+Qualified name: slices.cpu_time.thread_slice_cpu_time
+Search aliases: slices slices cpu time thread slice cpu time
+Kind: public TABLE
+Description: Time each thread slice spent running on CPU. Requires scheduling data to be available in the trace.
+Columns:
+- id (JOINID(slice.id)): Slice.
+- name (STRING): Name of the slice.
+- utid (JOINID(thread.id)): Id of the thread the slice is running on.
+- thread_name (STRING): Name of the thread.
+- upid (JOINID(process.id)): Id of the process the slice is running on.
+- process_name (STRING): Name of the process.
+- cpu_time (LONG): Duration of the time the slice was running."
+"slices.time_in_state.thread_slice_time_in_state","TABLE","Package: slices
+Module: slices.time_in_state
+Name: thread_slice_time_in_state
+Qualified name: slices.time_in_state.thread_slice_time_in_state
+Search aliases: slices slices time in state thread slice time in state
+Kind: public TABLE
+Description: For each thread slice, returns the sum of the time it spent in various scheduling states. Requires scheduling data to be available in the trace.
+Columns:
+- id (JOINID(slice.id)): Thread slice.
+- name (STRING): Name of the slice.
+- utid (JOINID(thread.id)): Thread the slice is running on.
+- thread_name (STRING): Name of the thread.
+- upid (JOINID(process.id)): Id of the process the slice is running on.
+- process_name (STRING): Name of the process.
+- state (STRING): The scheduling state (from the `thread_state` table). Use the `sched_state_to_human_readable_string` function in the `sched` package to get full name.
+- io_wait (BOOL): If the `state` is uninterruptible sleep, `io_wait` indicates if it was an IO sleep. Will be null if `state` is *not* uninterruptible sleep or if we cannot tell if it was an IO sleep or not. Only available on Android when `sched/sched_blocked_reason` ftrace tracepoint is enabled.
+- blocked_function (STRING): If in uninterruptible sleep (D), the kernel function on which was blocked. Only available on userdebug Android builds when `sched/sched_blocked_reason` ftrace tracepoint is enabled.
+- dur (DURATION): The duration of time the threads slice spent for each (state, io_wait, blocked_function) tuple."
+"sched.time_in_state.sched_time_in_state_for_thread_in_interval","TABLE_FUNCTION","Package: sched
+Module: sched.time_in_state
+Name: sched_time_in_state_for_thread_in_interval
+Qualified name: sched.time_in_state.sched_time_in_state_for_thread_in_interval
+Search aliases: sched sched time in state sched time in state for thread in interval
+Kind: public TABLE_FUNCTION
+Description: Time the thread spent each state in a given interval. This function is only designed to run over a small number of intervals (10-100 at most). It will be *very slow* for large sets of intervals. Specifically for any non-trivial subset of thread slices, prefer using `thread_slice_time_in_state` in the `slices.time_in_state` module for this purpose instead.
+Arguments:
+- ts (TIMESTAMP): The start of the interval.
+- dur (DURATION): The duration of the interval.
+- utid (JOINID(thread.id)): The utid of the thread.
+Returns: TABLE
+Columns:
+- state (STRING): The scheduling state (from the `thread_state` table). Use the `sched_state_to_human_readable_string` function in the `sched` package to get full name.
+- io_wait (BOOL): A (posssibly NULL) boolean indicating, if the device was in uninterruptible sleep, if it was an IO sleep.
+- blocked_function (LONG): If the `state` is uninterruptible sleep, `io_wait` indicates if it was an IO sleep. Will be null if `state` is *not* uninterruptible sleep or if we cannot tell if it was an IO sleep or not. Only available on Android when `sched/sched_blocked_reason` ftrace tracepoint is enabled.
+- dur (DURATION): The duration of time the threads slice spent for each (state, io_wait, blocked_function) tuple."
+
+"id","ts","dur","category","name","track_id","track_name","thread_name","utid","tid","process_name","upid","pid","depth","parent_id","ar[611.668]            query.cc:191 Query execution time: 1170 ms
+g_set_id"
+
+"id","name","utid","thread_name","upid","process_name","cpu_time"
+
+"utid","id","tid","name","start_ts","end_ts","upid","is_main_thread","is_idle","machine_id","arg_set_id"
+
+"id","name","type","parent_id","source_arg_set_id","machine_id","unit","description","upid"
+
+"id","ts","track_id","value","arg_set_id"
+
+"frame_id","ts","dur","do_frame_id","draw_frame_id","actual_frame_timeline_id","expected_frame_timeline_id","render_thread_utid","ui_thread_utid","actual_frame_timeline_count","expected_frame_timeline_count","draw_frame_count","upid","process_name"
+
+"id","ts","dur","track_id","category","name","depth","parent_id","arg_set_id","display_frame_token","surface_frame_token","upid","layer_name","present_type","on_time_finish","gpu_composition","jank_type","jank_severity_type","prediction_type","jank_tag","jank_tag_experimental","jank_score","latched_unsignaled_count","addressable_unsignaled_latch_count","latched_fence_state"
+
+"id","name","key","idx","severity","source","value","description","machine_id","trace_id"
+
+[673.490]            query.cc:191 Query execution time: 1018 ms
+"id","name","utid","thread_name","upid","process_name","state","io_wait","blocked_function","dur"

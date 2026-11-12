@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="20" failures="1" errors="0" skipped="0" time="0.000" timestamp="2026-11-11T12:40:49" hostname="localhost">
+  <testsuite name="ge.gogichaishvili.backgammon.CheckerDrawingTest" tests="2" failures="0" errors="0" skipped="0" time="93.093" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="pairedDrawingAllocationMeasurement" classname="ge.gogichaishvili.backgammon.CheckerDrawingTest" time="29.228" />
+    <testcase name="cachedCheckerPreservesPixelsForEverySkinStyleAndTrayOrFlightRadius" classname="ge.gogichaishvili.backgammon.CheckerDrawingTest" time="63.865" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="useAppContext" classname="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" time="0.000" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameActivityTest" tests="1" failures="0" errors="0" skipped="0" time="29.406" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="activityRecreationAndLandscapeKeepGameAndConfirmationState" classname="ge.gogichaishvili.backgammon.GameActivityTest" time="29.406" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameInteractionTest" tests="7" failures="0" errors="0" skipped="0" time="312.150" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="hitMotionEndsWithOneCheckerOnTheOpponentsBar" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="13.241" />
+    <testcase name="doublesUseFourMovesBeforeTurnCanSwitch" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="14.515" />
+    <testcase name="newGameDialogCanCancelOrResetWithoutChangingRulesState" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="24.295" />
+    <testcase name="ambiguousBearOffOffersExplicitDieChoice" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="15.244" />
+    <testcase name="realPointerTapsSelectHighlightAndMoveWithActualEngineDice" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="63.392" />
+    <testcase name="bearingOffShowsReproducibleGammonDialog" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="107.262" />
+    <testcase name="barEntryIsAvailableWhileOtherSourcesAreForbidden" classname="ge.gogichaishvili.backgammon.GameInteractionTest" time="74.201" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameplayAccessibilityTest" tests="4" failures="1" errors="0" skipped="0" time="449.363" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="settingsExposeRadioAndSwitchStateAndSwitchLanguageAtLargeText" classname="ge.gogichaishvili.backgammon.GameplayAccessibilityTest" time="134.097" />
+    <testcase name="georgianAtTwoHundredPercentSupportsGameplayAndConfirmation" classname="ge.gogichaishvili.backgammon.GameplayAccessibilityTest" time="101.759" />
+    <testcase name="semanticEquivalentControlsSelectAndMoveWithoutTouchingNarrowPoints" classname="ge.gogichaishvili.backgammon.GameplayAccessibilityTest" time="102.496" />
+    <testcase name="accessibleBearOffOpensReadableVictoryDialogAtLargeText" classname="ge.gogichaishvili.backgammon.GameplayAccessibilityTest" time="111.011">
+      <failure>java.lang.AssertionError: Failed to perform checkIsDisplayed check: Expected at most 1 node but found 2 nodes that satisfy (Text + InputText + EditableText contains 'White wins' (ignoreCase: false))
+	at androidx.compose.ui.test.AndroidAssertions_androidKt.checkIsDisplayed(AndroidAssertions.android.kt:35)
+	at androidx.compose.ui.test.AssertionsKt.isDisplayed(Assertions.kt:351)
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:33)
+	at ge.gogichaishvili.backgammon.GameplayAccessibilityTest.accessibleBearOffOpensReadableVictoryDialogAtLargeText(GameplayAccessibilityTest.kt:118)
+</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameplayPolishTest" tests="3" failures="0" errors="0" skipped="0" time="244.566" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="themeChangeDuringHitKeepsOneAnimationOwnerAndInterruptionKeepsCommittedBoard" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="105.507" />
+    <testcase name="fileReopenRestoresAnExactMidTurnWithoutReplayingAnimations" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="71.404" />
+    <testcase name="corruptedFileRecoversWithVisibleNoticeAndDurablySavesFreshGame" classname="ge.gogichaishvili.backgammon.GameplayPolishTest" time="67.655" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.NavigationTest" tests="2" failures="0" errors="0" skipped="0" time="150.807" timestamp="2026-11-11T12:40:49" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="settingsDestinationSurvivesSavedStateRestoration" classname="ge.gogichaishvili.backgammon.NavigationTest" time="69.804" />
+    <testcase name="themeSelectionUpdatesBoardAfterNavigatingBack" classname="ge.gogichaishvili.backgammon.NavigationTest" time="81.003" />
+  </testsuite>
+</testsuites>

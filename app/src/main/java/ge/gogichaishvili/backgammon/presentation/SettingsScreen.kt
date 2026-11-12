@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import ge.gogichaishvili.backgammon.R
@@ -93,15 +95,18 @@ fun SettingsScreen(
 
 @Composable
 private fun ThemeCard(theme: BoardTheme, selected: Boolean, settings: AppSettings, onSelect: () -> Unit) {
+    val accessibleName = tr(themeName(theme.id))
     Surface(
-        modifier = Modifier.testTag("theme_" + theme.id).selectable(selected, role = Role.RadioButton, onClick = onSelect),
+        modifier = Modifier.testTag("theme_" + theme.id).selectable(selected, role = Role.RadioButton, onClick = onSelect)
+            .semantics { contentDescription = accessibleName },
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(if (selected) 2.dp else 1.dp,
             if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline),
     ) {
         Column(Modifier.padding(Space.medium), verticalArrangement = Arrangement.spacedBy(Space.small)) {
-            BoardCanvas(theme, Modifier.fillMaxWidth(), settings.checkerStyle, settings.diceStyle)
+            BoardCanvas(theme, Modifier.fillMaxWidth(), settings.checkerStyle, settings.diceStyle,
+                description = tr(R.string.board_preview))
             Text(tr(themeName(theme.id)), style = MaterialTheme.typography.titleMedium)
             Text(tr(themeDetail(theme.id)), style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -1,0 +1,139 @@
+"stage","section","samples","avg_wall_ms","cpu_ms"
+"BG.Stage.gameplay","BG.Draw.BoardDice",22,0.413000,8.074000
+"BG.Stage.gameplay","BG.Draw.Checkers",19,4.954000,58.608000
+"BG.Stage.gameplay","BG.Draw.Dice",12,0.187000,2.246000
+"BG.Stage.gameplay","BG.Draw.Overlay",47,0.299000,13.526000
+"BG.Stage.orientation","BG.Draw.Checkers",2,2.243000,4.487000
+"BG.Stage.orientation","BG.Draw.Dice",4,2.714000,0.621000
+"BG.Stage.orientation","BG.Draw.Materials",2,11.751000,4.072000
+"BG.Stage.orientation","BG.Draw.Overlay",2,0.066000,0.132000
+"BG.Stage.theme","BG.Draw.Checkers",8,1.801000,10.516000
+"BG.Stage.theme","BG.Draw.Dice",6,0.094000,0.565000
+"BG.Stage.theme","BG.Draw.Materials",3,1.037000,2.795000
+"BG.Stage.theme","BG.Draw.Overlay",8,0.086000,0.689000
+
+"stage","composition","count"
+"BG.Stage.gameplay","BG.Compose.BoardCanvas",19
+"BG.Stage.gameplay","BG.Compose.DiceDisplay",19
+"BG.Stage.gameplay","BG.Compose.GameScreen",19
+"BG.Stage.gameplay","BG.Compose.InteractiveBoard",19
+"BG.Stage.orientation","BG.Compose.BoardCanvas",2
+"BG.Stage.orientation","BG.Compose.DiceDisplay",2
+"BG.Stage.orientation","BG.Compose.GameScreen",2
+"BG.Stage.orientation","BG.Compose.InteractiveBoard",2
+"BG.Stage.theme","BG.Compose.BoardCanvas",8
+"BG.Stage.theme","BG.Compose.DiceDisplay",4
+"BG.Stage.theme","BG.Compose.GameScreen",4
+"BG.Stage.theme","BG.Compose.InteractiveBoard",8
+
+"stage","section","samples","wall_ms","cpu_ms","max_wall_ms"
+"BG.Stage.gameplay","animation",75,1082.959000,600.631000,145.110000
+"BG.Stage.gameplay","Recomposer:recompose",75,931.370000,519.957000,144.921000
+"BG.Stage.gameplay","traversal",57,7052.223000,322.254000,215.786000
+"BG.Stage.gameplay","Compose:recompose",120,557.949000,306.856000,73.428000
+"BG.Stage.gameplay","draw-VRI[MainActivity]",57,6791.843000,166.688000,215.618000
+"BG.Stage.gameplay","Record View#draw()",57,220.187000,146.433000,33.321000
+"BG.Stage.gameplay","Compose:applyChanges",102,240.534000,130.246000,53.554000
+"BG.Stage.gameplay","measure",19,189.377000,116.397000,30.287000
+"BG.Stage.gameplay","AndroidOwner:onMeasure",19,186.653000,113.773000,30.191000
+"BG.Stage.gameplay","TextStringSimpleNode::measure",61,104.838000,64.690000,26.689000
+"BG.Stage.gameplay","BG.Draw.Checkers",19,94.133000,58.608000,31.287000
+"BG.Stage.gameplay","Recomposer:animation",56,106.142000,55.064000,16.802000
+"BG.Stage.gameplay","Choreographer#scheduleVsyncLocked",86,79.514000,32.458000,10.827000
+"BG.Stage.gameplay","layout",19,44.276000,26.591000,12.135000
+"BG.Stage.gameplay","TextLayout:initLayout",61,44.126000,24.447000,8.074000
+"BG.Stage.gameplay","Compose:onRemembered",29,29.966000,13.575000,14.691000
+"BG.Stage.gameplay","BG.Draw.Overlay",47,14.046000,13.526000,2.661000
+"BG.Stage.gameplay","Compose:sideeffects",57,12.669000,11.275000,1.244000
+"BG.Stage.gameplay","Constructing StaticLayout",61,19.312000,10.651000,3.623000
+"BG.Stage.gameplay","postAndWait",57,6556.489000,8.289000,214.859000
+
+"stage","state","time_ms"
+"BG.Stage.gameplay","R",510.207000
+"BG.Stage.gameplay","R+",219.090000
+"BG.Stage.gameplay","Running",907.192000
+"BG.Stage.gameplay","S",6495.173000
+"BG.Stage.orientation","R",825.657000
+"BG.Stage.orientation","R+",1555.835000
+"BG.Stage.orientation","Running",765.726000
+"BG.Stage.orientation","S",7581.124000
+"BG.Stage.theme","D",1.687000
+"BG.Stage.theme","R",71.231000
+"BG.Stage.theme","R+",68.267000
+"BG.Stage.theme","Running",238.083000
+"BG.Stage.theme","S",1228.778000
+
+"stage","frames","wall_ms","cpu_ms","max_wall_ms"
+"BG.Stage.gameplay",57,8131.662000,907.192000,219.817000
+"BG.Stage.orientation",3,10728.342000,765.726000,9997.334000
+"BG.Stage.theme",10,1608.046000,238.083000,291.738000
+
+"stage","seconds"
+"BG.Stage.gameplay",9.359000
+"BG.Stage.theme",1.690000
+"BG.Stage.orientation",36.711000
+
+"trace_seconds"
+184.654000
+
+"stage","section","samples","wall_ms","cpu_ms","max_wall_ms"
+"BG.Stage.gameplay","AndroidOwner:onMeasure",19,186.653000,113.773000,30.191000
+"BG.Stage.gameplay","Recomposer:recompose",75,931.370000,519.957000,144.921000
+"BG.Stage.gameplay","Record View#draw()",57,220.187000,146.433000,33.321000
+"BG.Sta[919.450]            query.cc:191 Query execution time: 2133 ms
+ge.gameplay","postAndWait",57,6556.489000,8.289000,214.859000
+"BG.Stage.orientation","AndroidOwner:onMeasure",4,1706.011000,499.178000,1348.025000
+"BG.Stage.orientation","Recomposer:recompose",5,96.192000,15.532000,48.967000
+"BG.Stage.orientation","Record View#draw()",4,87.816000,56.166000,47.154000
+"BG.Stage.orientation","postAndWait",4,950.614000,1.609000,516.123000
+"BG.Stage.theme","AndroidOwner:onMeasure",4,54.761000,50.382000,20.596000
+"BG.Stage.theme","Recomposer:recompose",14,219.388000,146.235000,68.297000
+"BG.Stage.theme","Record View#draw()",10,28.390000,21.816000,10.123000
+"BG.Stage.theme","postAndWait",10,1207.136000,1.236000,270.303000
+
+"stage","jank_type","frames"
+"BG.Stage.gameplay","App Deadline Missed, App Resynced Jitter, Non Animating",1
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed",13
+"BG.Stage.gameplay","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",18
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed",13
+"BG.Stage.gameplay","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",12
+"BG.Stage.orientation","App Deadline Missed, App Resynced Jitter, Non Animating",1
+"BG.Stage.orientation","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",2
+"BG.Stage.theme","App Deadline Missed, App Resynced Jitter, Non Animating",2
+"BG.Stage.theme","SurfaceFlinger CPU Deadline Missed, App Deadline Missed",3
+"BG.Stage.theme","SurfaceFlinger CPU Deadline Missed, App Deadline Missed, App Resynced Jitter",3
+"BG.Stage.theme","SurfaceFlinger Scheduling, App Deadline Missed",1
+"BG.Stage.theme","SurfaceFlinger Scheduling, App Deadline Missed, App Resynced Jitter",1
+
+"name","samples","min_mib","max_mib"
+"HWUI All Memory",95,2.130000,60.300000
+"Purgeable HWUI Misc Memory",95,0.060000,35.770000
+"mem.rss",137,92.900000,153.290000
+
+"stage","name","samples","min_mib","max_mib"
+"BG.Stage.gameplay","HWUI All Memory",57,16.140000,16.440000
+"BG.Stage.gameplay","Purgeable HWUI Misc Memory",57,7.680000,8.240000
+"BG.Stage.gameplay","mem.rss",10,147.480000,153.150000
+"BG.Stage.orientation","HWUI All Memory",6,24.790000,60.300000
+"BG.Stage.orientation","Purgeable HWUI Misc Memory",6,22.250000,35.770000
+"BG.Stage.orientation","mem.rss",33,148.020000,153.290000
+"BG.Stage.theme","HWUI All Memory",9,16.440000,60.300000
+"BG.Stage.theme","Purgeable HWUI Misc Memory",9,7.960000,35.770000
+"BG.Stage.theme","mem.rss",2,146.580000,147.980000
+
+"thread_name","name","samples","wall_ms","cpu_ms"
+"RenderThread","Texture upload(10) 232x20",1,40.613000,40.613000
+"RenderThread","TextureOp",126,39.149000,26.120000
+"RenderThread","Texture upload(10) 420x49",1,9.747000,9.747000
+"RenderThread","Texture upload(10) 492x72",1,8.162000,8.162000
+"RenderThread","Texture upload(10) 240x38",1,7.002000,7.002000
+"RenderThread","Texture upload(10) 296x38",1,6.853000,4.470000
+"RenderThread","Texture upload(10) 24x30",1,5.332000,3.432000
+"RenderThread","Texture upload(10) 200x38",1,4.785000,4.519000
+"RenderThread","Texture upload(10) 496x52",1,4.148000,4.044000
+"RenderThread","Texture upload(10) 444x41",1,3.515000,3.227000
+
+"name","idx","severity","source","value"
+
+"pid","name","cmdline"
+19676,"ge.gogichaishvili.backgammon.profile","ge.gogichaishvili.backgammon.profile"

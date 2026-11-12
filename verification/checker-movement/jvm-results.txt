@@ -1,0 +1,19 @@
+{"tests":433,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.AccessibilityContrastTest.xml {"tests":9,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.BoardGeometryTest.xml {"tests":6,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.ExampleUnitTest.xml {"tests":1,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.LocalizedResourcesTest.xml {"tests":2,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.SettingsPersistenceTest.xml {"tests":4,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.SettingsViewModelTest.xml {"tests":4,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.ThemeAndMotionTest.xml {"tests":3,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.data.MatchDiceMatrixTest.xml {"tests":36,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.data.MatchPersistenceTest.xml {"tests":15,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.designsystem.GameplayMotionTest.xml {"tests":4,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.engine.BearOffAndScoringTest.xml {"tests":15,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.engine.DiceMatrixTest.xml {"tests":252,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.engine.EngineInvariantTest.xml {"tests":8,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.engine.GameTransitionsTest.xml {"tests":13,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.engine.MoveRulesTest.xml {"tests":17,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.feedback.FeedbackTest.xml {"tests":6,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.presentation.game.DurableGameViewModelTest.xml {"tests":14,"failures":0,"errors":0,"skipped":0}
+TEST-ge.gogichaishvili.backgammon.presentation.game.GameViewModelTest.xml {"tests":24,"failures":0,"errors":0,"skipped":0}

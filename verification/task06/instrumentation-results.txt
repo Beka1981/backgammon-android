@@ -1,0 +1,2 @@
+tests=20 failures=0 errors=0 skipped=0
+TEST-Pixel_10_Pro(AVD) - 17.xml tests=20 failures=0 errors=0 skipped=0

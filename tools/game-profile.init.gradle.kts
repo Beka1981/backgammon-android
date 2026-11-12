@@ -28,6 +28,11 @@ gradle.projectsEvaluated {
                 check(process.exitValue() == 0) { name + ": " + text }
                 return text
             }
+            val configuration = rootProject.file(rootProject.findProperty("profileConfig")?.toString()
+                ?: "verification/task05/gameplay.pftxt")
+            val durationMillis = Regex("duration_ms:\\s*(\\d+)").find(configuration.readText())
+                ?.groupValues?.get(1)?.toLongOrNull() ?: error("Trace config needs a finite duration_ms")
+            require(durationMillis > 0)
             val helper = File(tools, "record_android_trace")
             if (!helper.isFile) URI("https://raw.githubusercontent.com/google/perfetto/main/tools/record_android_trace")
                 .toURL().openStream().use { input -> helper.outputStream().use { input.copyTo(it) } }
@@ -35,7 +40,7 @@ gradle.projectsEvaluated {
             run("compile", 120, adb, "-s", serial, "shell", "cmd", "package", "compile", "-m", "speed", "-f", pkg)
             val recorderLog = File(output, "recording.log")
             val recorder = ProcessBuilder("python3", helper.absolutePath, "-n", "-s", serial,
-                "-c", rootProject.file("verification/task05/gameplay.pftxt").absolutePath,
+                "-c", configuration.absolutePath,
                 "-o", File(output, "gameplay.perfetto-trace").absolutePath)
                 .redirectErrorStream(true).redirectOutput(recorderLog).apply {
                     environment()["PATH"] = File(sdk, "platform-tools").absolutePath + File.pathSeparator + System.getenv("PATH")
@@ -48,7 +53,7 @@ gradle.projectsEvaluated {
                     pkg + ".test/androidx.test.runner.AndroidJUnitRunner")
                 check(!result.contains("FAILURES!!!") && !result.contains("INSTRUMENTATION_FAILED") &&
                     result.contains("OK (1 test)")) { result }
-                check(recorder.waitFor(150, TimeUnit.SECONDS)) { "Trace recording timed out" }
+                check(recorder.waitFor(durationMillis / 1000 + 120, TimeUnit.SECONDS)) { "Trace recording timed out" }
                 check(recorder.exitValue() == 0) { recorderLog.readText() }
                 run("pull", 60, adb, "-s", serial, "pull",
                     "/sdcard/Android/media/" + pkg + "/task05-" + label + "/task05-performance/performance.json",
@@ -76,10 +81,11 @@ gradle.projectsEvaluated {
                     } ?: requireNotNull(rootProject.findProperty("perfettoQuery")?.toString()))
             }
             val log = File(output, "query-" + (rootProject.findProperty("queryLabel")?.toString() ?: action) + ".txt")
+            val errorLog = File(output, log.nameWithoutExtension + "-stderr.txt")
             val process = ProcessBuilder(listOf("python3", wrapper.absolutePath) + arguments)
-                .redirectErrorStream(true).redirectOutput(log).start()
+                .redirectOutput(log).redirectError(errorLog).start()
             check(process.waitFor(180, TimeUnit.SECONDS)) { "Trace processor timed out" }
-            check(process.exitValue() == 0) { log.readText() }
+            check(process.exitValue() == 0) { log.readText() + "\n" + errorLog.readText() }
             logger.lifecycle(log.readText())
         }
     }

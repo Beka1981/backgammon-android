@@ -114,7 +114,7 @@ private fun rememberCheckerProgress(state: GameUiState, dispatch: (GameUiAction)
 private fun GameHeading(settings: SettingsUiState, state: GameUiState) {
     Text(tr(R.string.game_local), style = MaterialTheme.typography.labelSmall,
         color = MaterialTheme.colorScheme.primary)
-    Text(tr(themeName(settings.theme.id)), style = MaterialTheme.typography.titleLarge)
+    Text(tr(themeName(settings.theme.id)), Modifier.semantics { heading() }, style = MaterialTheme.typography.titleLarge)
     val status = if (state.game.turn == TurnState.Opening) tr(R.string.game_opening)
         else state.game.result?.let { tr(R.string.game_wins, playerLabel(it.winner)) }
             ?: tr(R.string.game_turn, playerLabel(state.game.currentPlayer))
@@ -143,7 +143,8 @@ private fun GameControls(settings: SettingsUiState, state: GameUiState, dispatch
         GameNotice.RESTORE_FAILED -> R.string.game_restore_failed
         GameNotice.NONE -> R.string.game_select
     }
-    Text(tr(notice), Modifier.testTag("game_notice").semantics { liveRegion = LiveRegionMode.Polite },
+    val noticeText = tr(if (state.game.result != null) R.string.game_finished else notice)
+    Text(noticeText, Modifier.testTag("game_notice").semantics { liveRegion = LiveRegionMode.Polite },
         style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     DiceDisplay(settings, state, dispatch)
     Row(horizontalArrangement = Arrangement.spacedBy(Space.small)) {
@@ -175,11 +176,19 @@ private fun GameControls(settings: SettingsUiState, state: GameUiState, dispatch
                 MoveSource.Bar -> tr(R.string.game_bar_short)
                 is MoveSource.OnPoint -> tr(R.string.game_point_short, source.number)
             }
+            val actionDescription = tr(R.string.game_select_control, label)
+            val sourceTag = when (source) {
+                MoveSource.Bar -> "source_bar"
+                is MoveSource.OnPoint -> "source_" + source.number
+            }
             OutlinedButton(onClick = { dispatch(GameUiAction.Tap(when (source) {
                 MoveSource.Bar -> BoardTarget.Bar
                 is MoveSource.OnPoint -> BoardTarget.Point(source.number)
             }, state.revision)) }, enabled = !state.busy && state.storageIssue == null, modifier = Modifier.heightIn(min = Space.minTouch)
-                .semantics { selected = state.selected == source }) { Text(label) }
+                .testTag(sourceTag).semantics {
+                    selected = state.selected == source
+                    contentDescription = actionDescription
+                }) { Text(label) }
         }
     }
     if (state.selectedMoves.isNotEmpty()) {
@@ -189,10 +198,16 @@ private fun GameControls(settings: SettingsUiState, state: GameUiState, dispatch
                 MoveDestination.Off -> tr(R.string.game_off_short)
                 is MoveDestination.OnPoint -> tr(R.string.game_point_short, target.number)
             }
+            val actionDescription = tr(R.string.game_move_control, label)
+            val destinationTag = when (target) {
+                MoveDestination.Off -> "destination_off"
+                is MoveDestination.OnPoint -> "destination_" + target.number
+            }
             Button(onClick = { dispatch(GameUiAction.Tap(when (target) {
                 MoveDestination.Off -> if (state.game.currentPlayer == Player.WHITE) BoardTarget.WhiteTray else BoardTarget.BlackTray
                 is MoveDestination.OnPoint -> BoardTarget.Point(target.number)
-            }, state.revision)) }, enabled = !state.busy && state.storageIssue == null, modifier = Modifier.heightIn(min = Space.minTouch)) { Text(label) }
+            }, state.revision)) }, enabled = !state.busy && state.storageIssue == null, modifier = Modifier.heightIn(min = Space.minTouch)
+                .testTag(destinationTag).semantics { contentDescription = actionDescription }) { Text(label) }
         }
     }
 }
@@ -227,14 +242,16 @@ private fun DiceDisplay(settings: SettingsUiState, state: GameUiState, dispatch:
     if (state.dice.isEmpty()) return
     Text(if (state.rolledBy == null) tr(R.string.game_opening_dice)
         else tr(R.string.game_dice_owner, playerLabel(state.rolledBy)), style = MaterialTheme.typography.labelLarge)
-    Row(horizontalArrangement = Arrangement.spacedBy(Space.small), modifier = Modifier.testTag("dice_display")) {
+    FlowRow(modifier = Modifier.fillMaxWidth().testTag("dice_display"),
+        horizontalArrangement = Arrangement.spacedBy(Space.small),
+        verticalArrangement = Arrangement.spacedBy(Space.small)) {
         state.dice.forEachIndexed { index, die ->
             val status = tr(if (die.consumed) R.string.game_consumed else if (die.available) R.string.game_unused else R.string.game_unplayable)
             val description = tr(R.string.game_die, die.value, status)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Canvas(Modifier.size(48.dp).testTag("die_$index").semantics { contentDescription = description }
+                Canvas(Modifier.size(48.dp).testTag("die_$index").semantics { contentDescription = description; role = Role.Image }
                     .graphicsLayer {
-                        alpha = if (die.consumed) 0.35f else if (die.available) 1f else 0.65f
+                        alpha = if (die.consumed) DiceEmphasis.consumed else if (die.available) 1f else DiceEmphasis.unplayable
                         val t = if (transition == null) 1f else progress.value
                         val bounce = GameMotion.diceBounce(t)
                         rotationZ = GameMotion.diceRotation(t, index)

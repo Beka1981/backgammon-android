@@ -36,7 +36,7 @@
     <string name="language">Language</string>
     <string name="english">English</string>
     <string name="georgian">ქართული</string>
-    <string name="future_audio">Sound, music and haptic preferences are saved for future gameplay.</string>
+    <string name="future_audio">Sound and haptic feedback follow your preferences. Music is reserved for a future release.</string>
     <string name="loading">Preparing your table…</string>
     <string name="read_error">Your preferences could not be loaded.</string>
     <string name="save_error">Changes could not be saved. Please try your selection again.</string>

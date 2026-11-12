@@ -52,7 +52,9 @@ fun InteractiveBoard(
             else selection.animateTo(1f, tween(selectionDuration))
         }
     }
-    val selectedTargets = state.selectedMoves.map { it.to }
+    val selectedTargets = remember(state.selectedMoves) { state.selectedMoves.map { it.to }.distinct() }
+    val hasHit = flights.any { it.hit }
+    val brushes = remember(theme.palette) { CheckerBrushes(theme.palette) }
     val boardLabel = tr(R.string.game_board)
     BoardCanvas(theme, modifier.testTag("game_board").semantics { contentDescription = boardLabel },
         settings.checkerStyle, settings.diceStyle,
@@ -75,10 +77,12 @@ fun InteractiveBoard(
                         requireNotNull(state.game.currentPlayer), target, count - 1))
                     val emphasis = selection.value
                     drawCircle(Color(p.accent).copy(alpha = .12f * emphasis), 36f, Offset(c.x, c.y))
+                    drawCircle(Color(p.dark).copy(alpha = emphasis), 29f + 2f * emphasis,
+                        Offset(c.x, c.y), style = Stroke(6f + 2f * emphasis))
                     drawCircle(Color(p.accent).copy(alpha = emphasis), 29f + 2f * emphasis,
                         Offset(c.x, c.y), style = Stroke(2f + 2f * emphasis))
                 }
-                selectedTargets.distinct().forEach { target ->
+                selectedTargets.forEach { target ->
                     val c = when (target) {
                         is MoveDestination.OnPoint -> {
                             val point = BoardGeometry.pointCenter(target.number)
@@ -88,17 +92,19 @@ fun InteractiveBoard(
                             if (state.game.currentPlayer == Player.WHITE) 955f else 45f, 350f)
                     }
                     drawCircle(Color(p.accent).copy(alpha = 0.3f), 23f, Offset(c.x, c.y))
+                    drawCircle(Color(p.dark), 18f, Offset(c.x, c.y), style = Stroke(7f))
                     drawCircle(Color(p.accent), 18f, Offset(c.x, c.y), style = Stroke(3f))
                 }
+                val progress = checkerProgress.value
                 flights.forEach { flight ->
-                    val t = if (flight.restacking) checkerProgress.value else
-                        GameMotion.flight(checkerProgress.value, flight.hit, flights.any { it.hit })
+                    val t = if (flight.restacking) progress else
+                        GameMotion.flight(progress, flight.hit, hasHit)
                     val lift = if (flight.restacking) 0f else GameMotion.lift(t)
                     val x = flight.from.x + (flight.to.x - flight.from.x) * t
                     val y = flight.from.y + (flight.to.y - flight.from.y) * t - lift * if (flight.hit) 22f else 36f
                     val radius = if (flight.bearingOff) 26f - 8f * t else 26f
                     drawChecker(Offset(x, y), Color(if (flight.player == Player.WHITE) p.ivory else p.dark),
-                        p, settings.checkerStyle, radius * (1f + .06f * lift), elevation = lift)
+                        p, settings.checkerStyle, radius * (1f + .06f * lift), elevation = lift, brushes = brushes)
                 }
             }
         }
@@ -129,13 +135,18 @@ fun InteractiveBoard(
                     BoardTarget.WhiteTray -> "white_tray"
                     BoardTarget.BlackTray -> "black_tray"
                 }
+                val actionLabel = tr(if (legal) R.string.game_move_action else R.string.game_select_action)
                 Box(Modifier.offset(boardWidth * (bounds.left / 1000f), boardHeight * (bounds.top / 700f))
                     .size(boardWidth * ((bounds.right - bounds.left) / 1000f), boardHeight * ((bounds.bottom - bounds.top) / 700f))
                     .testTag(tag).semantics {
                         contentDescription = label
                         this.selected = selected
                         stateDescription = status
-                        if (!state.busy && state.storageIssue == null && (legal || selectable)) onClick {
+                        if (legal || selectable) {
+                            role = Role.Button
+                            if (state.busy || state.storageIssue != null) disabled()
+                        }
+                        if (!state.busy && state.storageIssue == null && (legal || selectable)) onClick(label = actionLabel) {
                             send(GameUiAction.Tap(target, state.revision)); true
                         }
                     })

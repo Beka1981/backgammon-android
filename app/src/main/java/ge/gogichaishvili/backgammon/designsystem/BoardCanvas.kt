@@ -28,6 +28,7 @@ fun BoardCanvas(
 ) {
     CompositionTrace("BG.Compose.BoardCanvas")
     val palette = theme.palette
+    val checkerBrushes = remember(palette) { CheckerBrushes(palette) }
     val labelPaint = remember(palette) {
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color(palette.accent).toArgb()
@@ -47,7 +48,7 @@ fun BoardCanvas(
         }
         Canvas(Modifier.fillMaxSize().graphicsLayer()) {
             scale(size.width / BoardGeometry.width, size.height / BoardGeometry.height, Offset.Zero) {
-                renderTrace("BG.Draw.Checkers") { drawPosition(board, hidden, palette, checkerStyle) }
+                renderTrace("BG.Draw.Checkers") { drawPosition(board, hidden, palette, checkerStyle, checkerBrushes) }
                 diceValues.take(2).forEachIndexed { index, value ->
                     renderTrace("BG.Draw.BoardDice") { drawDie(Offset(625f + index * 77f, 325f), value, palette, diceStyle) }
                 }
@@ -109,11 +110,11 @@ private fun DrawScope.drawBoard(
     }
 }
 
-private fun DrawScope.drawPosition(board: BoardState, hidden: List<CheckerVisualSlot>, p: BoardPalette, style: CheckerStyle) {
+private fun DrawScope.drawPosition(board: BoardState, hidden: List<CheckerVisualSlot>, p: BoardPalette, style: CheckerStyle, brushes: CheckerBrushes) {
     fun render(slot: CheckerVisualSlot, radius: Float = BoardGeometry.checkerRadius) {
         if (slot in hidden) return
         val c = checkerVisualCenter(board, slot)
-        drawChecker(Offset(c.x, c.y), Color(if (slot.player == Player.WHITE) p.ivory else p.dark), p, style, radius)
+        drawChecker(Offset(c.x, c.y), Color(if (slot.player == Player.WHITE) p.ivory else p.dark), p, style, radius, brushes = brushes)
     }
     (1..24).forEach { number ->
         val point = board.point(number)
@@ -128,20 +129,22 @@ private fun DrawScope.drawPosition(board: BoardState, hidden: List<CheckerVisual
 }
 
 internal fun DrawScope.drawChecker(center: Offset, color: Color, p: BoardPalette, style: CheckerStyle,
-    radius: Float = BoardGeometry.checkerRadius, elevation: Float = 0f) {
-    drawCircle(Color(p.shadow).copy(alpha = 0.22f), radius + 4f + elevation * 5f, center + Offset(2f, 5f + elevation * 7f))
-    drawCircle(Color(p.shadow), radius, center + Offset(1f, 3f))
-    if (style == CheckerStyle.SCULPTED) {
-        drawCircle(Brush.radialGradient(listOf(lerp(color, Color.White, 0.28f), color,
-            lerp(color, Color.Black, 0.35f)), center - Offset(10f, 12f), radius * 1.6f), radius, center)
-        drawCircle(lerp(color, Color.White, 0.22f), radius - 5f, center, style = Stroke(1.5f))
-        drawCircle(lerp(color, Color.Black, 0.15f), radius - 8f, center, style = Stroke(2.5f))
-        drawArc(Color.White.copy(alpha = 0.24f), 210f, 100f, false,
-            center - Offset(radius - 3f, radius - 3f), Size((radius - 3f) * 2, (radius - 3f) * 2),
-            style = Stroke(2f))
-    } else {
-        drawCircle(color, radius, center)
-        drawCircle(Color(p.accent).copy(alpha = 0.5f), radius - 4f, center, style = Stroke(1.5f))
+    radius: Float = BoardGeometry.checkerRadius, elevation: Float = 0f, brushes: CheckerBrushes? = null) {
+    translate(center.x, center.y) {
+        val localCenter = Offset.Zero
+        drawCircle(Color(p.shadow).copy(alpha = 0.22f), radius + 4f + elevation * 5f, localCenter + Offset(2f, 5f + elevation * 7f))
+        drawCircle(Color(p.shadow), radius, localCenter + Offset(1f, 3f))
+        if (style == CheckerStyle.SCULPTED) {
+            drawCircle(brushes?.forChecker(color, radius) ?: checkerBrush(color, radius), radius, localCenter)
+            drawCircle(lerp(color, Color.White, 0.22f), radius - 5f, localCenter, style = Stroke(1.5f))
+            drawCircle(lerp(color, Color.Black, 0.15f), radius - 8f, localCenter, style = Stroke(2.5f))
+            drawArc(Color.White.copy(alpha = 0.24f), 210f, 100f, false,
+                localCenter - Offset(radius - 3f, radius - 3f), Size((radius - 3f) * 2, (radius - 3f) * 2),
+                style = Stroke(2f))
+        } else {
+            drawCircle(color, radius, localCenter)
+            drawCircle(Color(p.accent).copy(alpha = 0.5f), radius - 4f, localCenter, style = Stroke(1.5f))
+        }
     }
 }
 
@@ -150,16 +153,6 @@ internal fun DrawScope.drawDie(origin: Offset, value: Int, p: BoardPalette, styl
     drawRoundRect(Color(p.shadow), origin + Offset(2f, 5f), Size(52f, 52f), CornerRadius(9f))
     drawRoundRect(Brush.linearGradient(listOf(lerp(face, Color.White, 0.2f), face)),
         origin, Size(52f, 52f), CornerRadius(9f))
-    val diagonal = listOf(13f to 13f, 39f to 39f)
-    val corners = diagonal + listOf(39f to 13f, 13f to 39f)
-    val pips = when (value) {
-        1 -> listOf(26f to 26f)
-        2 -> diagonal
-        3 -> diagonal + (26f to 26f)
-        4 -> corners
-        5 -> corners + (26f to 26f)
-        6 -> corners + listOf(13f to 26f, 39f to 26f)
-        else -> emptyList()
-    }
-    pips.forEach { (x, y) -> drawCircle(Color(p.dark), 4f, origin + Offset(x, y)) }
+    val pips = diePips.getOrNull(value) ?: return
+    for (i in pips.indices) drawCircle(Color(p.dark), 4f, origin + pips[i])
 }

@@ -36,7 +36,7 @@
     <string name="language">ენა</string>
     <string name="english">English</string>
     <string name="georgian">ქართული</string>
-    <string name="future_audio">ხმის, მუსიკისა და ვიბრაციის პარამეტრები ინახება მომავალი თამაშისთვის.</string>
+    <string name="future_audio">ხმა და ვიბრაცია თქვენს პარამეტრებს ითვალისწინებს. მუსიკა მომავალ ვერსიაში დაემატება.</string>
     <string name="loading">დაფა მზადდება…</string>
     <string name="read_error">პარამეტრების ჩატვირთვა ვერ მოხერხდა.</string>
     <string name="save_error">ცვლილება ვერ შეინახა. გთხოვთ, ხელახლა აირჩიოთ.</string>

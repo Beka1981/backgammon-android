@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="5" failures="2" errors="0" skipped="0" time="0.000" timestamp="2026-11-11T14:40:35" hostname="localhost">
+  <testsuite name="ge.gogichaishvili.backgammon.CheckerDrawingTest" tests="2" failures="0" errors="0" skipped="0" time="4.523" timestamp="2026-11-11T14:40:35" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="cachedBrushesRemainCorrectAcrossRepeatedCanvasSizeChanges" classname="ge.gogichaishvili.backgammon.CheckerDrawingTest" time="2.465" />
+    <testcase name="cachedCheckerPreservesPixelsForEverySkinStyleAndTrayOrFlightRadius" classname="ge.gogichaishvili.backgammon.CheckerDrawingTest" time="2.058" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" tests="1" failures="0" errors="0" skipped="0" time="0.098" timestamp="2026-11-11T14:40:35" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="useAppContext" classname="ge.gogichaishvili.backgammon.ExampleInstrumentedTest" time="0.098" />
+  </testsuite>
+  <testsuite name="ge.gogichaishvili.backgammon.GameActivityTest" tests="1" failures="1" errors="0" skipped="0" time="1256.279" timestamp="2026-11-11T14:40:35" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="activityRecreationAndLandscapeKeepGameAndConfirmationState" classname="ge.gogichaishvili.backgammon.GameActivityTest" time="1256.279">
+      <failure>Test failed with status -1</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="android-test" tests="1" failures="1" errors="0" skipped="0" time="0.000" timestamp="2026-11-11T14:40:35" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="testRunFailed" classname="android-test" time="0.000">
+      <failure>Test run failed to complete. Instrumentation run failed due to Process crashed.</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,38 @@
+buffers { size_kb: 65536 fill_policy: RING_BUFFER }
+duration_ms: 300000
+data_sources {
+  config {
+    name: "linux.ftrace"
+    ftrace_config {
+      ftrace_events: "sched/sched_switch"
+      ftrace_events: "sched/sched_waking"
+      ftrace_events: "task/task_rename"
+      ftrace_events: "power/cpu_frequency"
+      ftrace_events: "kmem/rss_stat"
+      atrace_categories: "gfx"
+      atrace_categories: "view"
+      atrace_categories: "wm"
+      atrace_categories: "am"
+      atrace_categories: "dalvik"
+      atrace_apps: "ge.gogichaishvili.backgammon.profile"
+    }
+  }
+}
+data_sources { config { name: "android.surfaceflinger.frametimeline" } }
+data_sources {
+  config {
+    name: "linux.process_stats"
+    process_stats_config { scan_all_processes_on_start: true proc_stats_poll_ms: 1000 }
+  }
+}
+data_sources {
+  config {
+    name: "linux.sys_stats"
+    sys_stats_config {
+      meminfo_period_ms: 1000
+      meminfo_counters: MEMINFO_MEM_AVAILABLE
+      vmstat_period_ms: 1000
+      vmstat_counters: VMSTAT_PGFAULT
+    }
+  }
+}

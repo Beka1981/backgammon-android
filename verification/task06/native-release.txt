@@ -1,0 +1,25 @@
+androidx.datastore:datastore-core-android:1.2.1 jni/arm64-v8a/libdatastore_shared_counter.so: LOAD alignment=0x4000, 0x4000, 0x4000, 0x4000; RELRO=end=0xc000 suffix=true; LOAD_OK=true; RELRO_OK=true
+androidx.datastore:datastore-core-android:1.2.1 jni/armeabi-v7a/libdatastore_shared_counter.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+androidx.datastore:datastore-core-android:1.2.1 jni/x86/libdatastore_shared_counter.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+androidx.datastore:datastore-core-android:1.2.1 jni/x86_64/libdatastore_shared_counter.so: LOAD alignment=0x4000, 0x4000, 0x4000, 0x4000; RELRO=end=0xc000 suffix=true; LOAD_OK=true; RELRO_OK=true
+androidx.graphics:graphics-path:1.1.0 jni/arm64-v8a/libandroidx.graphics.path.so: LOAD alignment=0x4000, 0x4000, 0x4000; RELRO=end=0x6000 suffix=true; LOAD_OK=true; RELRO_OK=true
+androidx.graphics:graphics-path:1.1.0 jni/armeabi-v7a/libandroidx.graphics.path.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+androidx.graphics:graphics-path:1.1.0 jni/x86/libandroidx.graphics.path.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+androidx.graphics:graphics-path:1.1.0 jni/x86_64/libandroidx.graphics.path.so: LOAD alignment=0x4000, 0x4000, 0x4000; RELRO=end=0x6000 suffix=true; LOAD_OK=true; RELRO_OK=true
+APK lib/arm64-v8a/libandroidx.graphics.path.so: LOAD alignment=0x4000, 0x4000, 0x4000; RELRO=end=0x6000 suffix=true; LOAD_OK=true; RELRO_OK=true
+APK lib/arm64-v8a/libdatastore_shared_counter.so: LOAD alignment=0x4000, 0x4000, 0x4000, 0x4000; RELRO=end=0xc000 suffix=true; LOAD_OK=true; RELRO_OK=true
+APK lib/armeabi-v7a/libandroidx.graphics.path.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+APK lib/armeabi-v7a/libdatastore_shared_counter.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+APK lib/x86/libandroidx.graphics.path.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+APK lib/x86/libdatastore_shared_counter.so: 32-bit ELF: 16 KB 64-bit requirement not applicable
+APK lib/x86_64/libandroidx.graphics.path.so: LOAD alignment=0x4000, 0x4000, 0x4000; RELRO=end=0x6000 suffix=true; LOAD_OK=true; RELRO_OK=true
+APK lib/x86_64/libdatastore_shared_counter.so: LOAD alignment=0x4000, 0x4000, 0x4000, 0x4000; RELRO=end=0xc000 suffix=true; LOAD_OK=true; RELRO_OK=true
+lib/arm64-v8a/libandroidx.graphics.path.so method=0 dataOffset=2932736 ZIP_16K_OK=true
+lib/arm64-v8a/libdatastore_shared_counter.so method=0 dataOffset=2949120 ZIP_16K_OK=true
+lib/armeabi-v7a/libandroidx.graphics.path.so method=0 dataOffset=2965504 ZIP_16K_OK=true
+lib/armeabi-v7a/libdatastore_shared_counter.so method=0 dataOffset=2981888 ZIP_16K_OK=true
+lib/x86/libandroidx.graphics.path.so method=0 dataOffset=2998272 ZIP_16K_OK=true
+lib/x86/libdatastore_shared_counter.so method=0 dataOffset=3014656 ZIP_16K_OK=true
+lib/x86_64/libandroidx.graphics.path.so method=0 dataOffset=3031040 ZIP_16K_OK=true
+lib/x86_64/libdatastore_shared_counter.so method=0 dataOffset=3047424 ZIP_16K_OK=true
+TOTAL_ALIGNMENT_ERRORS=0

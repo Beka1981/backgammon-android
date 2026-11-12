@@ -54,4 +54,9 @@
     <string name="match_save_failed">Your last action could not be saved. Retry to keep the exact dice and move.</string>
     <string name="match_newer_schema">This saved game needs a newer app version. Update the app to continue.</string>
     <string name="match_retry">Retry saved game</string>
+    <string name="game_select_action">Select checker</string>
+    <string name="game_move_action">Move checker here</string>
+    <string name="game_select_control">Select checker · %1$s</string>
+    <string name="game_move_control">Move checker · %1$s</string>
+    <string name="game_finished">Game complete. Start a new game to play again.</string>
 </resources>

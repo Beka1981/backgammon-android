@@ -54,4 +54,9 @@
     <string name="match_save_failed">ბოლო მოქმედება ვერ შეინახა. ხელახლა ცდა შეინარჩუნებს იმავე კამათელსა და სვლას.</string>
     <string name="match_newer_schema">შენახულ თამაშს აპის ახალი ვერსია სჭირდება. გასაგრძელებლად განაახლეთ აპი.</string>
     <string name="match_retry">შენახვის ხელახლა ცდა</string>
+    <string name="game_select_action">ქვის არჩევა</string>
+    <string name="game_move_action">ქვის აქ გადატანა</string>
+    <string name="game_select_control">ქვის არჩევა · %1$s</string>
+    <string name="game_move_control">ქვის გადატანა · %1$s</string>
+    <string name="game_finished">თამაში დასრულდა. კვლავ სათამაშოდ დაიწყეთ ახალი თამაში.</string>
 </resources>

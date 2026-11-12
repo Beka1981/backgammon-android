@@ -1,0 +1,95 @@
+{
+  "package": "ge.gogichaishvili.backgammon.profile",
+  "debuggable": false,
+  "sdk": 37,
+  "device": "sdk_gphone16k_x86_64",
+  "pid": 9025,
+  "clock": "real Choreographer",
+  "soundAndHaptics": "disabled for consistent rendering measurement",
+  "refreshHz": 60.000004,
+  "measuredMoves": 6,
+  "gameplay": {
+    "totalFrame": {
+      "count": 44,
+      "p50Ms": 2992.646369,
+      "p95Ms": 4145.051477,
+      "maxMs": 5594.74929,
+      "over16_67Ms": 44
+    },
+    "drawDuration": {
+      "count": 44,
+      "p50Ms": 40.410046,
+      "p95Ms": 155.580449,
+      "maxMs": 497.160588,
+      "over16_67Ms": 24
+    },
+    "layoutDuration": {
+      "count": 44,
+      "p50Ms": 2.22518,
+      "p95Ms": 195.056318,
+      "maxMs": 501.829264,
+      "over16_67Ms": 15
+    },
+    "callbackDrops": 0,
+    "wallMs": 63799.748591,
+    "allocatedBytes": 14254080,
+    "gcCount": 4,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  },
+  "theme": {
+    "totalFrame": {
+      "count": 3,
+      "p50Ms": 2331.59543,
+      "p95Ms": 2331.59543,
+      "maxMs": 2603.740862,
+      "over16_67Ms": 3
+    },
+    "drawDuration": {
+      "count": 3,
+      "p50Ms": 8.26651,
+      "p95Ms": 8.26651,
+      "maxMs": 40.981868,
+      "over16_67Ms": 1
+    },
+    "layoutDuration": {
+      "count": 3,
+      "p50Ms": 1.729598,
+      "p95Ms": 1.729598,
+      "maxMs": 192.492261,
+      "over16_67Ms": 1
+    },
+    "callbackDrops": 0,
+    "wallMs": 4003.026566,
+    "allocatedBytes": 1179648,
+    "gcCount": 0,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  },
+  "orientation": {
+    "totalFrame": {
+      "count": 8,
+      "p50Ms": 6098.123513,
+      "p95Ms": 7421.640851,
+      "maxMs": 10778.439313,
+      "over16_67Ms": 8
+    },
+    "drawDuration": {
+      "count": 8,
+      "p50Ms": 54.587422,
+      "p95Ms": 206.36502,
+      "maxMs": 298.049513,
+      "over16_67Ms": 5
+    },
+    "layoutDuration": {
+      "count": 8,
+      "p50Ms": 244.339045,
+      "p95Ms": 2450.378696,
+      "maxMs": 3401.211702,
+      "over16_67Ms": 5
+    },
+    "callbackDrops": 0,
+    "wallMs": 37508.414155,
+    "allocatedBytes": 2620512,
+    "gcCount": 0,
+    "allocationScope": "whole instrumented app process; includes test overhead"
+  }
+}

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
  */
 gradle.projectsEvaluated {
     rootProject.project(":app").tasks.register("installProfileMeasurement") {
-        dependsOn(":app:assembleProfileAndroidTest")
+        dependsOn(":app:assembleProfile", ":app:assembleProfileAndroidTest")
         doLast {
             require(rootProject.findProperty("profileTests") == "true")
             val sdk = Properties().apply {

@@ -5,3 +5,6 @@
 -keep,allowoptimization class kotlinx.coroutines.BuildersKt { *; }
 -keep,allowoptimization class androidx.lifecycle.SavedStateHandle { *; }
 -keep,allowoptimization class androidx.lifecycle.ViewModelStore { *; }
+# A profile-only drawing probe is invoked reflectively, returning JSON across APK boundaries.
+# Keep its entry point, while allowing R8 to optimize its complete target-side call graph.
+-keep,allowoptimization class ge.gogichaishvili.backgammon.DrawingProbe { *; }

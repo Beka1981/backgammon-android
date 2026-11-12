@@ -5,3 +5,4 @@
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault,InnerClasses,EnclosingMethod
 -keep class ge.gogichaishvili.backgammon.GamePerformanceTest { *; }
 -keep class ge.gogichaishvili.backgammon.ProcessPersistenceTest { *; }
+-keep class ge.gogichaishvili.backgammon.ProfileDrawingMeasurementTest { *; }
