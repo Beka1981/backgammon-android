@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_label">YOUR PLAYER IDENTITY</string>
+    <string name="profile_title">My profile</string>
+    <string name="profile_setup">Make your entrance</string>
+    <string name="profile_edit">Edit profile</string>
+    <string name="profile_choose_avatar">Choose your avatar</string>
+    <string name="profile_loading">Loading your profile…</string>
+    <string name="profile_use_avatar">Use this avatar</string>
+    <string name="profile_cancel">Cancel</string>
+    <string name="profile_setup_hint">Choose how other players will see you. You can always play locally without a profile.</string>
+    <string name="profile_custom_disabled">Custom photo uploads are not available yet. Choose an original built-in avatar.</string>
+    <string name="profile_username">Username</string>
+    <string name="profile_username_hint">Use 3–20 ASCII letters, digits or underscores. Usernames are case-insensitive.</string>
+    <string name="profile_display_name">Display name</string>
+    <string name="profile_saving">Saving…</string>
+    <string name="profile_save">Save profile</string>
+    <string name="profile_statistics">Player statistics</string>
+    <string name="profile_played">Games played: %1$d</string>
+    <string name="profile_won">Wins: %1$d</string>
+    <string name="profile_lost">Losses: %1$d</string>
+    <string name="profile_percentage">Win percentage: %1$.1f%%</string>
+    <string name="profile_rating_future">Rating: coming later</string>
+    <string name="profile_reload">Reload latest profile</string>
+    <string name="profile_reserved">This username is reserved. Choose another.</string>
+    <string name="profile_unavailable_name">That username is unavailable. Please choose another.</string>
+    <string name="profile_name_hint">Use 1–40 characters without control or hidden formatting characters.</string>
+    <string name="profile_avatar_invalid">Choose an avatar from the collection.</string>
+    <string name="profile_conflict">Your profile changed elsewhere. Reload before editing again.</string>
+    <string name="profile_auth_required">Your session is unavailable. Sign out and sign in again.</string>
+    <string name="profile_network">Unable to connect. Your local game is still available.</string>
+    <string name="profile_rate_limit">Too many changes. Please try again later.</string>
+    <string name="profile_service_unavailable">Profiles are not available right now. Please retry or play locally.</string>
+    <string name="profile_unknown">Unable to save your profile. Please retry.</string>
+    <string name="avatar_crown">Crown</string>
+    <string name="avatar_knight">Knight</string>
+    <string name="avatar_sun">Sun</string>
+    <string name="avatar_moon">Moon</string>
+    <string name="avatar_mountain">Mountain</string>
+    <string name="avatar_lotus">Lotus</string>
+    <string name="avatar_shield">Shield</string>
+    <string name="avatar_star">Star</string>
+</resources>

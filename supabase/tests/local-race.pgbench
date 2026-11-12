@@ -1,0 +1,4 @@
+BEGIN;
+SET LOCAL ROLE bg_profile_backend;
+SELECT public.fixture_profile_race(:client_id);
+COMMIT;

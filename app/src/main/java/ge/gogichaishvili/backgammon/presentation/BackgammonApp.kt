@@ -10,6 +10,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.testTag
 import ge.gogichaishvili.backgammon.presentation.auth.*
+import ge.gogichaishvili.backgammon.presentation.profile.*
+import ge.gogichaishvili.backgammon.domain.auth.AuthState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -47,6 +49,8 @@ fun BackgammonApp(
     onGameAction: (GameUiAction) -> Unit = {},
     authUi: AuthUiState? = null,
     onAuthAction: (AuthAction) -> Unit = {},
+    profileUi: ProfileUiState? = null,
+    onProfileAction: (ProfileAction) -> Unit = {},
 ) {
     // NavEntry content can outlive its entry-provider invocation. Read observable latest
     // values inside the retained entry instead of capturing its initial snapshot.
@@ -55,6 +59,8 @@ fun BackgammonApp(
     val currentGameAction by rememberUpdatedState(onGameAction)
     val currentAuth by rememberUpdatedState(authUi)
     val currentAuthAction by rememberUpdatedState(onAuthAction)
+    val currentProfile by rememberUpdatedState(profileUi)
+    val currentProfileAction by rememberUpdatedState(onProfileAction)
     LocalizedContent(state.settings.language) {
         BackgammonTheme(state.theme) {
             val stack = rememberNavBackStack(BoardRoute)
@@ -65,6 +71,13 @@ fun BackgammonApp(
                 if (authUi?.openRequested == true) {
                     openAccount()
                     currentAuthAction(AuthAction.NavigationHandled)
+                }
+            }
+            LaunchedEffect(profileUi?.openRequested, profileUi?.ownerId, authUi?.session) {
+                if (profileUi?.openRequested == true && authUi?.session is AuthState.SignedIn &&
+                    !authUi.session.recoveryRequired && profileUi.ownerId == authUi.session.user.id) {
+                    openAccount()
+                    currentProfileAction(ProfileAction.NavigationHandled)
                 }
             }
             val back = { if (stack.size > 1) stack.removeAt(stack.lastIndex); Unit }
@@ -140,7 +153,16 @@ fun BackgammonApp(
                                         SettingsScreen(currentState.settings, themes, onTheme, onUpdate)
                                     }
                                     AccountRoute -> NavEntry(key) {
-                                        currentAuth?.let { AuthScreen(it, currentAuthAction, back) }
+                                        currentAuth?.let { account ->
+                                            val signedIn = account.session as? AuthState.SignedIn
+                                            val profile = currentProfile
+                                            if (signedIn != null && !signedIn.recoveryRequired && profile != null)
+                                                ProfileScreen(
+                                                    if (profile.ownerId == signedIn.user.id) profile else ProfileUiState(),
+                                                    currentProfileAction,
+                                                    { currentAuthAction(AuthAction.Logout) }, back, !account.busy)
+                                            else AuthScreen(account, currentAuthAction, back)
+                                        }
                                     }
                                     else -> error("Unknown destination")
                                 }

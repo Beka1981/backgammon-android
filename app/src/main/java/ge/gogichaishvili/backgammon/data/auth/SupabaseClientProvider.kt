@@ -3,6 +3,7 @@ package ge.gogichaishvili.backgammon.data.auth
 import ge.gogichaishvili.backgammon.BuildConfig
 import ge.gogichaishvili.backgammon.domain.auth.*
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.auth.FlowType
 import io.github.jan.supabase.logging.LogLevel
@@ -24,10 +25,13 @@ class SupabaseConfiguration private constructor(val url: String, val publishable
         }.getOrNull()
     }
 }
+data class AccountServices(val auth: AuthRepository, val profiles: ge.gogichaishvili.backgammon.domain.profile.ProfileRepository)
 object SupabaseClientProvider {
-    fun repository(storage: AuthStorage, scope: CoroutineScope): AuthRepository {
+    fun repository(storage: AuthStorage, scope: CoroutineScope): AuthRepository = services(storage, scope).auth
+    fun services(storage: AuthStorage, scope: CoroutineScope): AccountServices {
         val config = SupabaseConfiguration.parse(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_PUBLISHABLE_KEY)
-        if (!BuildConfig.SUPABASE_CONFIGURED || config == null) return UnconfiguredAuthRepository()
+        if (!BuildConfig.SUPABASE_CONFIGURED || config == null) return AccountServices(UnconfiguredAuthRepository(),
+            ge.gogichaishvili.backgammon.data.profile.UnconfiguredProfileRepository())
         val client = createSupabaseClient(config.url, config.publishableKey) {
             httpEngine = OkHttp.create()
             defaultLogLevel = LogLevel.NONE
@@ -38,7 +42,15 @@ object SupabaseClientProvider {
                 codeVerifierCache = StoredVerifier(storage)
             }
         }
-        return SupabaseAuthRepository(client, storage, scope, config.url, BuildConfig.APPLICATION_ID)
+        val authRepository = SupabaseAuthRepository(client, storage, scope, config.url, BuildConfig.APPLICATION_ID)
+        val profileHttp = io.ktor.client.HttpClient(OkHttp) {
+            install(io.ktor.client.plugins.HttpTimeout) { requestTimeoutMillis = 15000; connectTimeoutMillis = 10000 }
+        }
+        val profiles = ge.gogichaishvili.backgammon.data.profile.SupabaseProfileRepository(
+            profileHttp, config.url, config.publishableKey, authRepository) {
+            client.auth.currentSessionOrNull()?.accessToken
+        }
+        return AccountServices(authRepository, profiles)
     }
 }
 class UnconfiguredAuthRepository : AuthRepository {

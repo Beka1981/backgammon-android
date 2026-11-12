@@ -14,3 +14,10 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Local backend credentials and generated Supabase CLI state.
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/

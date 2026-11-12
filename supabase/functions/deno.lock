@@ -1,0 +1,9 @@
+{
+  "version": "5",
+  "specifiers": { "npm:postgres@4.1.1": "4.1.1" },
+  "npm": {
+    "postgres@4.1.1": {
+      "integrity": "sha512-1kJDojqNZC+iTHHXh6eif0J98LUtyLAePe/qkW1GK35eh2JixlsAiIKq3FGI+xqI+SUGTNodzf7TScVeIIyUug=="
+    }
+  }
+}

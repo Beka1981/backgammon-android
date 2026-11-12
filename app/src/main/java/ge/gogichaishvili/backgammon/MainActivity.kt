@@ -50,6 +50,10 @@ class MainActivity : ComponentActivity() {
         val settingsFactory = viewModelFactory {
             initializer { SettingsViewModel(container.settings, container.themes) }
         }
+        val profileFactory = viewModelFactory {
+            initializer { ge.gogichaishvili.backgammon.presentation.profile.ProfileViewModel(
+                container.auth, container.profiles, createSavedStateHandle()) }
+        }
         val gameFactory = viewModelFactory {
             initializer { GameViewModel(createSavedStateHandle(), matches = container.matches) }
         }
@@ -59,6 +63,8 @@ class MainActivity : ComponentActivity() {
             val settings by settingsModel.state.collectAsStateWithLifecycle()
             val game by gameModel.state.collectAsStateWithLifecycle()
             val auth by authModel.state.collectAsStateWithLifecycle()
+            val profileModel: ge.gogichaishvili.backgammon.presentation.profile.ProfileViewModel = viewModel(factory = profileFactory)
+            val profile by profileModel.state.collectAsStateWithLifecycle()
             SideEffect { if (settings.loaded) feedback.configure(settings.settings) }
             LaunchedEffect(gameModel) {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -71,7 +77,7 @@ class MainActivity : ComponentActivity() {
             }
             BackgammonApp(settings, settingsModel.availableThemes, settingsModel::selectTheme,
                 settingsModel::update, settingsModel::retryRead, settingsModel::dismissSaveError,
-                game, gameModel::dispatch, auth, authModel::dispatch)
+                game, gameModel::dispatch, auth, authModel::dispatch, profile, profileModel::dispatch)
         }
     }
 

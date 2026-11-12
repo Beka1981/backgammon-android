@@ -1,6 +1,6 @@
 # Accounts, profiles and avatars
 
-Design only. No Auth project/provider, Android SDK or Storage bucket is installed here.
+TASK07 design baseline. TASK08 Auth is implemented; TASK09 profile code/migration are prepared locally in [task09-profiles.md](task09-profiles.md). No profile migration, Edge function or Storage bucket has been deployed by TASK09.
 See [security](security.md), [schema](database-schema.md) and [protocol](protocol.md).
 
 ## Account and session flows

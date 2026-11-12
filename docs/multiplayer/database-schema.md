@@ -1,6 +1,6 @@
 # PostgreSQL schema and transaction specification
 
-Design contract, not an executable migration. All objects proposed here are future TASKs.
+TASK07 design contract. The profile/stats/IDLE activity subset now has an unapplied TASK09 migration; see [task09-profiles.md](task09-profiles.md) for exact scope and approval gates. Other objects remain future work.
 Use UUID primary keys, timestamptz server timestamps and bigint revision counters.
 The private app schema is NOT exposed through PostgREST. Grant anon/authenticated no table
 DML or private schema usage. Enable and FORCE RLS on all application tables; backend and

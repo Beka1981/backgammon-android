@@ -1,0 +1,5 @@
+{
+  "lock": "./deno.lock",
+  "compilerOptions": { "strict": true },
+  "tasks": { "check": "deno check player-profile/index.ts" }
+}

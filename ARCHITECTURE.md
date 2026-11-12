@@ -18,7 +18,13 @@ injectable DieSource; supplied server dice can use the same reducer in a future 
 - designsystem: original procedural materials, skin palettes, tokens, board and checker geometry.
 - animation: finite motion categories and pure visual curves, never game outcomes.
 - feedback: Activity-owned SoundPool/View haptics; original synthesized PCM cues prepared on IO.
-- network: documentation only. No Supabase, endpoint, client or secret.
+- domain/auth and data/auth: TASK08 Supabase Auth, isolated encrypted session storage and safe callback handling.
+- domain/profile, data/profile and presentation/profile: TASK09 account-scoped onboarding/editing,
+  public profile models and built-in avatar selection. The client uses an allowlisted Edge endpoint;
+  no Auth mapping or statistics write crosses the public profile boundary.
+- network: future multiplayer transports remain documentation only. No rooms/gameplay networking.
+  TASK09 private SQL/Edge code is prepared locally, with remote inspection/approval gates; see
+  docs/multiplayer/task09-profiles.md. Offline engine, match persistence and rendering are independent.
 
 Hilt, Room and extra modules are deferred until real scopes, relational history or multiple
 features justify them. Existing wrapper, AGP, SDK, compiler and Compose BOM remain unchanged.

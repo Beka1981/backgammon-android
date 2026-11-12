@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_label">თქვენი მოთამაშის პროფილი</string>
+    <string name="profile_title">ჩემი პროფილი</string>
+    <string name="profile_setup">შექმენით თქვენი პროფილი</string>
+    <string name="profile_edit">პროფილის შეცვლა</string>
+    <string name="profile_choose_avatar">აირჩიეთ ავატარი</string>
+    <string name="profile_loading">პროფილი იტვირთება…</string>
+    <string name="profile_use_avatar">ამ ავატარის არჩევა</string>
+    <string name="profile_cancel">გაუქმება</string>
+    <string name="profile_setup_hint">აირჩიეთ, როგორ დაგინახავენ სხვა მოთამაშეები. ადგილობრივი თამაში პროფილის გარეშეც შეგიძლიათ.</string>
+    <string name="profile_custom_disabled">საკუთარი ფოტოს ატვირთვა ჯერ მიუწვდომელია. აირჩიეთ ჩვენი კოლექციის ავატარი.</string>
+    <string name="profile_username">მომხმარებლის სახელი</string>
+    <string name="profile_username_hint">გამოიყენეთ 3–20 ლათინური ასო, ციფრი ან ქვედა ტირე. რეგისტრს მნიშვნელობა არ აქვს.</string>
+    <string name="profile_display_name">საჩვენებელი სახელი</string>
+    <string name="profile_saving">ინახება…</string>
+    <string name="profile_save">პროფილის შენახვა</string>
+    <string name="profile_statistics">მოთამაშის სტატისტიკა</string>
+    <string name="profile_played">ნათამაშები: %1$d</string>
+    <string name="profile_won">მოგებული: %1$d</string>
+    <string name="profile_lost">წაგებული: %1$d</string>
+    <string name="profile_percentage">მოგების პროცენტი: %1$.1f%%</string>
+    <string name="profile_rating_future">რეიტინგი: მოგვიანებით</string>
+    <string name="profile_reload">უახლესი პროფილის ჩატვირთვა</string>
+    <string name="profile_reserved">ეს სახელი რეზერვირებულია. აირჩიეთ სხვა.</string>
+    <string name="profile_unavailable_name">ეს სახელი დაკავებულია. აირჩიეთ სხვა.</string>
+    <string name="profile_name_hint">გამოიყენეთ 1–40 სიმბოლო, საკონტროლო და დაფარული ფორმატირების ნიშნების გარეშე.</string>
+    <string name="profile_avatar_invalid">აირჩიეთ ავატარი კოლექციიდან.</string>
+    <string name="profile_conflict">პროფილი სხვაგან შეიცვალა. ცვლილებამდე ჩატვირთეთ უახლესი ვერსია.</string>
+    <string name="profile_auth_required">სესია მიუწვდომელია. გამოდით და ხელახლა შედით.</string>
+    <string name="profile_network">დაკავშირება ვერ მოხერხდა. ადგილობრივი თამაში ხელმისაწვდომია.</string>
+    <string name="profile_rate_limit">ძალიან ბევრი ცვლილებაა. სცადეთ მოგვიანებით.</string>
+    <string name="profile_service_unavailable">პროფილები ახლა მიუწვდომელია. სცადეთ ხელახლა ან ითამაშეთ ადგილობრივად.</string>
+    <string name="profile_unknown">პროფილის შენახვა ვერ მოხერხდა. სცადეთ ხელახლა.</string>
+    <string name="avatar_crown">გვირგვინი</string>
+    <string name="avatar_knight">მხედარი</string>
+    <string name="avatar_sun">მზე</string>
+    <string name="avatar_moon">მთვარე</string>
+    <string name="avatar_mountain">მთა</string>
+    <string name="avatar_lotus">ლოტოსი</string>
+    <string name="avatar_shield">ფარი</string>
+    <string name="avatar_star">ვარსკვლავი</string>
+</resources>

@@ -1,0 +1,8 @@
+# Local deployment manifest only; no remote linking/deployment is authorized.
+project_id = "backgammon"
+
+[functions.player-profile]
+# The legacy gateway JWT verifier does not support every modern project signing key.
+# Authentication is mandatory INSIDE index.ts: Auth /user verification + issuer/audience/
+# expiry/role/subject checks + a live SQL session check. Key-only calls return 401.
+verify_jwt = false

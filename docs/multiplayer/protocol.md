@@ -1,6 +1,6 @@
 # Online protocol v1
 
-Normative design only; endpoints/types below are future contracts, not implemented APIs.
+TASK07 normative design; multiplayer endpoints remain future contracts. The locally implemented, undeployed TASK09 profile endpoint binding is documented in [task09-profiles.md](task09-profiles.md).
 See [architecture](architecture.md) for authority and [database](database-schema.md) for atomicity.
 
 ## Transport, identity and compatibility

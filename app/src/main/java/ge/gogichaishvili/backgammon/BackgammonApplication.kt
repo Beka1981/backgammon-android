@@ -19,10 +19,12 @@ private val Context.matchDataStore by dataStore(
 
 class AppContainer(context: Context) {
     private val authScope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO)
-    val auth: ge.gogichaishvili.backgammon.domain.auth.AuthRepository by lazy {
-        ge.gogichaishvili.backgammon.data.auth.SupabaseClientProvider.repository(
+    private val accounts by lazy {
+        ge.gogichaishvili.backgammon.data.auth.SupabaseClientProvider.services(
             ge.gogichaishvili.backgammon.data.auth.EncryptedAuthStorage(context), authScope)
     }
+    val auth get() = accounts.auth
+    val profiles get() = accounts.profiles
     val settings: SettingsRepository = DataStoreSettingsRepository(context.settingsDataStore)
     val matches: MatchRepository = DataStoreMatchRepository(context.matchDataStore)
     val themes: ThemeRepository = LocalThemeRepository(settings)
